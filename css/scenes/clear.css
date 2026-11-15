@@ -1,0 +1,40 @@
+/* クリア画面 */
+.clear { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+.clear-card {
+  max-width: 640px; width: 100%; padding: 28px 24px; text-align: center;
+  box-shadow: 6px 6px 0 var(--c-line); animation: pop-in .4s var(--ease-pop);
+}
+.clear-label { font-weight: 700; color: var(--c-muted); }
+.clear-title { font-size: 40px; color: var(--c-accent); -webkit-text-stroke: 1px var(--c-line); margin: 4px 0; }
+.clear-sub { font-weight: 700; }
+.clear-rate {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--c-surface-2); border-radius: 999px; padding: 6px 16px; margin-bottom: 10px;
+}
+.clear-rate strong { font-size: var(--fs-lg); }
+.clear-rate-bar { width: 120px; height: 10px; border: 2px solid var(--c-line); border-radius: 999px; overflow: hidden; background: var(--c-surface); }
+.clear-rate-bar span { display: block; height: 100%; background: var(--c-accent); }
+.clear-chest-note { font-size: var(--fs-sm); }
+
+.chests { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin: 16px 0 24px; min-height: 160px; }
+.chest {
+  position: relative; width: 132px; height: 150px; padding: 0;
+  background: none; border: 0; cursor: pointer; font: inherit; color: inherit;
+  animation: chest-in .5s var(--ease-pop) both;
+}
+@keyframes chest-in { from { transform: translateY(30px) scale(.5); opacity: 0; } to { transform: none; opacity: 1; } }
+.chest-svg { width: 120px; height: 100px; position: absolute; left: 6px; bottom: 0; overflow: visible; }
+.chest:not(.is-open):hover .chest-svg { animation: wiggle .4s ease-in-out; }
+.chest-lid { transform-origin: 12px 44px; transition: transform .45s var(--ease-pop); }
+.chest.is-open .chest-lid { transform: rotate(-35deg) translate(-6px, -14px); }
+.chest-item {
+  position: absolute; left: 0; right: 0; bottom: 60px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  opacity: 0; transform: translateY(20px) scale(.4); pointer-events: none;
+}
+.chest.is-open .chest-item { animation: item-up .7s var(--ease-pop) .15s forwards; }
+@keyframes item-up { to { opacity: 1; transform: translateY(-14px) scale(1); } }
+.chest-item img { width: 64px; height: 64px; }
+.chest-item-name { font-weight: 800; font-size: var(--fs-sm); background: var(--c-surface); border: 2px solid var(--c-line); border-radius: 999px; padding: 0 10px; white-space: nowrap; }
+.chest-item-note { font-size: 11px; color: var(--c-success); font-weight: 700; }
+.clear-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }

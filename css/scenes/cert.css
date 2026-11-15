@@ -1,0 +1,23 @@
+/* 認定部 */
+.cert { max-width: 1100px; margin: 0 auto; padding: 20px 16px 40px; text-align: center; }
+.cert-lead { font-weight: 700; color: var(--c-muted); margin: 0; animation: fade-in 1s; }
+.cert-title { font-size: 44px; color: var(--c-accent); -webkit-text-stroke: 1px var(--c-line); animation: pop-in .6s var(--ease-pop) .3s both; }
+.cert-stage { display: flex; align-items: flex-end; justify-content: center; gap: 12px; }
+.cert-frame {
+  margin: 0; flex: 0 1 820px; max-width: max(320px, calc((100vh - 300px) * 1.41));
+  padding: 10px; background: var(--c-surface);
+  border: var(--line-w) solid var(--c-line); border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--c-line);
+  animation: cert-in 1s var(--ease-pop) .5s both;
+}
+.cert-img { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); }
+@keyframes cert-in { from { transform: scale(.3) rotate(-10deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.cert-side { width: 110px; flex: none; animation: jump 1.2s ease-in-out 1.4s 3; }
+.cert-side.is-jump { animation: jump .9s ease-in-out 3; }
+.cert-avatar { animation-delay: 1.6s; }
+.cert-shot {
+  display: inline-flex; flex-direction: column; gap: 4px; margin: 24px 0 16px; padding: 12px 22px;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-accent);
+}
+.cert-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 760px) { .cert-side { display: none; } }

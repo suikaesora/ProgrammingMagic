@@ -1,0 +1,67 @@
+/* 装飾部 */
+.scene-deco { height: 100vh; display: flex; flex-direction: column; }
+.deco { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+.deco-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex-wrap: wrap; }
+.deco-sep { width: 2px; height: 22px; background: var(--c-surface-2); }
+.deco-help { font-size: var(--fs-xs); margin-left: auto; }
+.deco-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 260px; gap: 10px; }
+
+.deco-stage-wrap { position: relative; min-height: 300px; overflow: hidden; }
+.deco-stage {
+  position: absolute; transform-origin: 0 0;
+  background: var(--c-surface);
+  border: var(--line-w) solid var(--c-line); border-radius: var(--radius-lg);
+  overflow: hidden; touch-action: none; user-select: none;
+}
+.deco-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 32%; background: var(--c-surface-2); border-top: 2px dashed var(--c-muted); }
+.deco-layer { position: absolute; inset: 0; }
+.deco-char { position: absolute; left: 50%; bottom: 60px; width: 260px; height: 330px; margin-left: -130px; pointer-events: none; }
+
+.deco-item { position: absolute; left: 0; top: 0; cursor: grab; touch-action: none; }
+.deco-item:active { cursor: grabbing; }
+.deco-item img { width: 100%; height: 100%; display: block; pointer-events: none; }
+.deco-item.is-selected { outline: calc(2px * var(--inv, 1)) dashed var(--c-accent); outline-offset: calc(4px * var(--inv, 1)); }
+.deco-h {
+  position: absolute; display: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--c-surface); border: 2.5px solid var(--c-accent);
+  transform: scale(var(--inv, 1));
+  font-size: 12px; font-weight: 800; line-height: 17px; text-align: center; color: var(--c-danger);
+}
+.deco-item.is-selected .deco-h { display: block; }
+.deco-h-rot { left: 50%; top: -42px; margin-left: -11px; cursor: alias; transform-origin: 50% 100%; }
+.deco-h-rot::after { content: ""; position: absolute; left: 50%; top: 100%; width: 2px; height: 16px; background: var(--c-accent); margin-left: -1px; }
+.deco-h-scale { right: -14px; bottom: -14px; cursor: nwse-resize; border-radius: 6px; }
+.deco-h-del { right: -14px; top: -14px; cursor: pointer; border-color: var(--c-danger); }
+
+.deco-drawer { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.deco-grid { flex: 1; overflow: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; padding: 10px; align-content: start; }
+.deco-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 4px; font: inherit; font-size: 11px; font-weight: 700; color: var(--c-text);
+  background: var(--c-surface); border: 2px solid var(--c-line); border-radius: var(--radius-sm);
+  cursor: pointer; transition: transform .12s var(--ease-pop);
+}
+.deco-cell img { width: 46px; height: 46px; }
+.deco-cell:hover:not(:disabled) { transform: translateY(-3px) rotate(-2deg); background: var(--c-accent-weak); }
+.deco-cell.is-locked { cursor: default; color: var(--c-muted); border-style: dashed; border-color: var(--c-muted); }
+.deco-cell.is-locked img { filter: brightness(0); opacity: .15; }
+.deco-drawer-note { font-size: var(--fs-xs); padding: 0 12px 10px; margin: 0; }
+
+.deco-photo-exit { display: none; position: fixed; right: 16px; top: 16px; z-index: 50; opacity: .25; transition: opacity .2s; }
+.deco-photo-exit:hover { opacity: 1; }
+
+/* 撮影モード：UI を隠して部屋だけ大きく */
+.scene-deco.is-photo .topbar,
+.scene-deco.is-photo .deco-toolbar,
+.scene-deco.is-photo .deco-drawer { display: none; }
+.scene-deco.is-photo .deco-body { grid-template-columns: 1fr; }
+.scene-deco.is-photo .deco-photo-exit { display: inline-flex; }
+
+@media (max-width: 800px) {
+  .scene-deco { height: auto; min-height: 100vh; }
+  .deco-body { grid-template-columns: 1fr; }
+  .deco-stage-wrap { height: 70vw; }
+  .deco-drawer { max-height: 260px; }
+  .deco-help { display: none; }
+}

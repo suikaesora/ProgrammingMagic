@@ -1,0 +1,111 @@
+/* 基本スタイル（色や線は theme.css の変数のみを使う） */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { min-height: 100%; }
+
+h1, h2, h3, h4 { margin: 0 0 .5em; line-height: 1.35; font-weight: 800; }
+p { margin: 0 0 .8em; }
+a { color: var(--c-accent); }
+img { max-width: 100%; }
+code, kbd {
+  font-family: var(--font-code);
+  font-size: .92em;
+  background: var(--c-surface-2);
+  border-radius: 6px;
+  padding: .05em .4em;
+}
+kbd { border: 1.5px solid var(--c-line); border-bottom-width: 3px; }
+pre code { background: none; padding: 0; }
+
+.hidden { display: none !important; }
+.muted { color: var(--c-muted); }
+
+/* ---- ボタン ---- */
+.btn {
+  --btn-bg: var(--c-surface);
+  --btn-fg: var(--c-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4em;
+  padding: .45em 1.05em;
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: var(--line-w) solid var(--c-line);
+  border-radius: 999px;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-line);
+  cursor: pointer;
+  transition: transform .08s, box-shadow .08s, opacity .15s;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: calc(var(--shadow-offset) + 1px) calc(var(--shadow-offset) + 1px) 0 var(--c-line); }
+.btn:active { transform: translate(var(--shadow-offset), var(--shadow-offset)); box-shadow: 0 0 0 var(--c-line); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .4; cursor: not-allowed; transform: none; box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-line); }
+.btn:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; }
+
+.btn-primary { --btn-bg: var(--c-accent); --btn-fg: var(--c-on-accent); }
+.btn-success { --btn-bg: var(--c-success); --btn-fg: var(--c-on-accent); }
+.btn-danger { --btn-bg: var(--c-danger); --btn-fg: var(--c-on-accent); }
+.btn-lg { font-size: var(--fs-md); padding: .6em 1.6em; }
+.btn-sm { font-size: var(--fs-xs); padding: .25em .8em; box-shadow: 2px 2px 0 var(--c-line); border-width: 2px; }
+.btn-icon { padding: .35em .6em; }
+
+.btn-ghost {
+  background: transparent; border-color: transparent; box-shadow: none;
+}
+.btn-ghost:hover { background: var(--c-surface-2); box-shadow: none; transform: none; }
+
+/* ---- カード ---- */
+.card {
+  background: var(--c-surface);
+  border: var(--line-w) solid var(--c-line);
+  border-radius: var(--radius);
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: .25em;
+  padding: .05em .7em;
+  font-size: var(--fs-xs); font-weight: 700;
+  border: 2px solid var(--c-line);
+  border-radius: 999px;
+  background: var(--c-surface);
+}
+.badge-success { background: var(--c-success); color: var(--c-on-accent); }
+.badge-accent { background: var(--c-accent); color: var(--c-on-accent); }
+
+.stars { color: var(--c-accent); letter-spacing: .05em; white-space: nowrap; }
+.stars .off { color: var(--c-surface-2); -webkit-text-stroke: 1px var(--c-muted); }
+
+/* ---- スクロールバー ---- */
+* { scrollbar-width: thin; scrollbar-color: var(--c-muted) transparent; }
+
+/* ---- 汎用アニメーション ---- */
+@keyframes pop-in { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+@keyframes jump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-28px); } 60% { transform: translateY(-28px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

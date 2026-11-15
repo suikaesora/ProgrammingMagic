@@ -1,0 +1,47 @@
+/* 修行画面（解説パート・課題パート） */
+
+.scene-explain, .scene-task {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 解説：文章 | お手本 | ビジュアル */
+.layout-explain {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(300px, 1.1fr) minmax(360px, 420px);
+  gap: 12px;
+  padding: 12px;
+}
+
+/* 課題：左（問題 / お手本 | あなたのコード）| 右（ビジュアル） */
+.layout-task {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+  gap: 12px;
+  padding: 12px;
+}
+.task-left { display: grid; grid-template-rows: minmax(110px, auto) 1fr; gap: 12px; min-height: 0; min-width: 0; }
+.pane-problem { max-height: 32vh; }
+.pane-problem .prose { padding: 10px 18px; }
+.task-codes { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; min-height: 0; }
+.pane-user { box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-accent); }
+
+.pane-visual { overflow: auto; min-height: 0; padding-right: 2px; }
+
+/* 狭い画面では縦に並べる */
+@media (max-width: 1100px) {
+  .scene-explain, .scene-task { height: auto; min-height: 100vh; }
+  .layout-explain, .layout-task { grid-template-columns: 1fr; }
+  .pane-text { max-height: 50vh; }
+  .pane-code { height: 360px; }
+  .task-codes { grid-template-columns: 1fr; }
+  .pane-problem { max-height: none; }
+  .pane-visual { overflow: visible; }
+}
+@media (max-width: 640px) {
+  .topbar { flex-wrap: wrap; }
+  .layout-explain, .layout-task { padding: 8px 16px; }
+}

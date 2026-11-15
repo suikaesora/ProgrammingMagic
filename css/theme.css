@@ -1,0 +1,91 @@
+/* =========================================================
+   テーマ設定（見た目の基準ファイル）
+   色・アウトライン・角丸・影・フォントはすべてここで定義します。
+   他の CSS はこの変数だけを参照するので、ここを変えれば全体が変わります。
+   ========================================================= */
+
+:root {
+  /* ---- フォント ---- */
+  --font-ui: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif;
+  --font-code: "Source Code Pro", "Consolas", "Menlo", monospace;
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+
+  /* ---- 形 ---- */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --line-w: 2.5px;               /* 基本のアウトラインの太さ */
+  --shadow-offset: 3px;          /* ボタン等の「ぽってり影」のずれ幅 */
+
+  /* ---- コードエリア ---- */
+  --code-fs: 15px;
+  --code-lh: 24px;               /* 行の高さ（行隠し・ハイライトの位置計算にも使う） */
+  --gutter-w: 56px;
+
+  /* ---- アニメーション ---- */
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* ---- ライトモード ---- */
+:root,
+:root[data-theme="light"] {
+  --c-bg: #f5f1e8;               /* 背景 */
+  --c-surface: #fffdf8;          /* パネル・カード */
+  --c-surface-2: #ece6d9;        /* 一段沈んだ面 */
+  --c-text: #3b342c;             /* 文字 */
+  --c-muted: #8c8274;            /* 補助文字 */
+  --c-line: #3b342c;             /* アウトライン */
+  --c-accent: #e98a5d;           /* アクセント（1色のみ） */
+  --c-accent-weak: #fbe2d3;
+  --c-on-accent: #ffffff;
+  --c-success: #5fa36a;
+  --c-success-weak: #dcefd9;
+  --c-danger: #d65a50;
+  --c-danger-weak: #f8dcd8;
+  --c-overlay: rgba(40, 34, 28, .55);
+
+  /* シンタックスハイライト */
+  --syn-keyword: #c8643a;
+  --syn-string: #4f8f5a;
+  --syn-number: #7a62b8;
+  --syn-comment: #a59a8a;
+  --syn-func: #2f7aa8;
+
+  --c-code-bg: #fffdf8;
+  --c-exec-line: #fbe2d3;
+  --c-error-line: #f8dcd8;
+  color-scheme: light;
+}
+
+/* ---- ダークモード ---- */
+:root[data-theme="dark"] {
+  --c-bg: #24211d;
+  --c-surface: #2f2b26;
+  --c-surface-2: #3a352f;
+  --c-text: #efe8dc;
+  --c-muted: #a69c8e;
+  --c-line: #d9d0c2;
+  --c-accent: #f0a07a;
+  --c-accent-weak: #5a3f31;
+  --c-on-accent: #24211d;
+  --c-success: #86c48f;
+  --c-success-weak: #2f4632;
+  --c-danger: #ef8379;
+  --c-danger-weak: #573230;
+  --c-overlay: rgba(0, 0, 0, .6);
+
+  --syn-keyword: #f0a07a;
+  --syn-string: #9fd19f;
+  --syn-number: #c3b0f0;
+  --syn-comment: #8a8072;
+  --syn-func: #8cc4e8;
+
+  --c-code-bg: #2a2722;
+  --c-exec-line: #5a3f31;
+  --c-error-line: #573230;
+  color-scheme: dark;
+}

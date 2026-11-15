@@ -1,0 +1,32 @@
+/* 導入部（黒い画面に白い文字） */
+.scene-intro { background: #000; min-height: 100vh; }
+.intro {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 16px; color: #fff; gap: 32px;
+}
+.intro-story {
+  max-width: 640px; width: 100%;
+  font-size: 19px; line-height: 2.1; white-space: pre-wrap; letter-spacing: .05em;
+  transition: opacity .8s, transform .8s;
+}
+.intro.is-choosing .intro-story { opacity: .35; transform: translateY(-10px); font-size: 15px; }
+.intro-caret { animation: blink 1s steps(1) infinite; margin-left: 2px; }
+.intro-caret.is-done { opacity: 0; animation: none; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.intro-choose { text-align: center; animation: fade-in 1s; }
+.intro-q { font-size: var(--fs-lg); margin-bottom: 20px; }
+.intro-avatars { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+.intro-avatar {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  width: 170px; padding: 16px; cursor: pointer;
+  background: #1a1a1a; color: #fff; font: inherit; font-weight: 700;
+  border: 3px solid #555; border-radius: var(--radius-lg);
+  transition: transform .15s, border-color .15s;
+}
+.intro-avatar img { width: 120px; height: 150px; }
+.intro-avatar:hover { transform: translateY(-4px); border-color: #aaa; }
+.intro-avatar[aria-checked="true"] { border-color: var(--c-accent); background: #2a2018; transform: translateY(-4px); }
+.intro-avatar[aria-checked="true"] img { animation: jump .6s var(--ease-pop); }
+.scene-intro .btn { --btn-bg: var(--c-accent); border-color: #fff; box-shadow: 3px 3px 0 #fff; }

@@ -1,0 +1,57 @@
+/* ホーム（修行選択） */
+.home-top { flex-wrap: wrap; }
+.home-brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.home-logo { font-size: var(--fs-lg); font-weight: 800; }
+.home-sub { font-size: var(--fs-xs); }
+
+.home { max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
+.home-heading { font-size: var(--fs-xl); text-align: center; margin: 6px 0 10px; }
+
+.map-scroll {
+  overflow-x: auto; overflow-y: hidden;
+  background: var(--c-surface);
+  border: var(--line-w) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  margin-bottom: 18px;
+}
+.map { position: relative; margin: 0 auto; }
+.map-svg { position: absolute; inset: 0; }
+.map-road { fill: none; stroke: var(--c-muted); stroke-width: 6; stroke-dasharray: 2 14; stroke-linecap: round; }
+.map-road.is-done { stroke: var(--c-accent); stroke-dasharray: none; }
+
+.map-node {
+  position: absolute; width: 74px; height: 74px; margin: -37px 0 0 -37px;
+  border-radius: 50%; border: var(--line-w) solid var(--c-line);
+  background: var(--c-surface); color: var(--c-text);
+  font: inherit; font-weight: 800; font-size: 22px; cursor: pointer;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-line);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s var(--ease-pop);
+}
+.map-node:hover { transform: scale(1.08); }
+.map-node.is-open { background: var(--c-accent-weak); }
+.map-node.is-cleared { background: var(--c-accent); color: var(--c-on-accent); }
+.map-node.is-locked { background: var(--c-surface-2); color: var(--c-muted); cursor: not-allowed; box-shadow: none; }
+.map-node.is-locked:hover { transform: none; }
+.map-node.is-selected { outline: 4px solid var(--c-accent); outline-offset: 4px; }
+.map-node.is-current { animation: float 2.2s ease-in-out infinite; }
+.map-node-num { font-size: 20px; }
+.map-node-flag {
+  position: absolute; right: -6px; top: -6px; min-width: 24px; height: 24px; border-radius: 12px;
+  font-size: 13px; display: flex; align-items: center; justify-content: center;
+}
+.map-node.is-cleared .map-node-flag { background: var(--c-success); color: var(--c-on-accent); border: 2px solid var(--c-line); }
+.map-node-flag:empty { display: none; }
+
+.map-label {
+  position: absolute; transform: translateX(-50%); width: 160px; text-align: center;
+  font-size: var(--fs-xs); line-height: 1.4; pointer-events: none;
+}
+.map-label-title { font-weight: 800; font-size: var(--fs-sm); }
+.map-label.is-locked { color: var(--c-muted); }
+.map-avatar { position: absolute; width: 52px; height: 64px; margin-left: -26px; pointer-events: none; animation: float 1.6s ease-in-out infinite; }
+
+.home-detail { padding: 16px 20px; animation: fade-in .25s; }
+.home-detail-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.home-detail-head h2 { margin: 0; font-size: var(--fs-lg); }
+.home-detail-actions { display: flex; gap: 10px; flex-wrap: wrap; }
