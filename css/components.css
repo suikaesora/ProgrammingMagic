@@ -95,6 +95,7 @@
 .ce-input::selection { background: var(--c-accent-weak); color: transparent; }
 .code-editor:focus-within { box-shadow: inset 0 0 0 2px var(--c-accent); }
 .is-readonly .ce-input { cursor: default; }
+.is-nocopy .ce-input::selection { background: transparent; }
 .ce-layer { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; will-change: transform; }
 .ce-overlay { pointer-events: none; z-index: 2; }
 .ce-mark { position: absolute; left: 0; right: 0; }

@@ -13,7 +13,12 @@ const ICONS = {
   error: 'assets/icons/error.svg',
 };
 
-export function createCodeEditor(parent, { value = '', readOnly = false, lineIcons = {}, label = 'コード' } = {}) {
+/**
+ * @param {object} [opt]
+ * @param {boolean} [opt.noCopy] コピー・切り取り・ドラッグで持ち出せなくする（課題のお手本用）
+ * @param {() => void} [opt.onCopyBlocked] noCopy で持ち出しを止めたときに呼ばれる
+ */
+export function createCodeEditor(parent, { value = '', readOnly = false, lineIcons = {}, label = 'コード', noCopy = false, onCopyBlocked } = {}) {
   const host = document.createElement('div');
   host.className = 'code-editor';
   parent.appendChild(host);
@@ -35,6 +40,15 @@ export function createCodeEditor(parent, { value = '', readOnly = false, lineIco
   ta.value = value;
   ta.readOnly = readOnly;
   if (readOnly) host.classList.add('is-readonly');
+  if (noCopy) {
+    // 打った方が身につくので、お手本は写せないようにする
+    // （textarea には隠した行も入っているので、全選択コピーで答えが漏れるのも防ぐ）
+    host.classList.add('is-nocopy');
+    const block = (e) => { e.preventDefault(); onCopyBlocked?.(); };
+    ta.addEventListener('copy', block);
+    ta.addEventListener('cut', block);
+    ta.addEventListener('dragstart', block);
+  }
 
   const INDENT = config.indent;
   const listeners = new Set();

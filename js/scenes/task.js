@@ -55,7 +55,7 @@ export function mount(root, { lesson }) {
       </section>
       <div class="task-codes">
         <section class="pane pane-code card" data-tut="task-sample">
-          <div class="pane-head">お手本 <span class="muted pane-note">隠しをクリックではがせる</span></div>
+          <div class="pane-head">お手本 <span class="muted pane-note">隠しをクリックではがせる${config.allowSampleCopy ? '' : '・コピー不可'}</span></div>
           <div class="pane-editor sample-editor"></div>
         </section>
         <section class="pane pane-code card pane-user" data-tut="user-code">
@@ -72,7 +72,14 @@ export function mount(root, { lesson }) {
 
   // ---- お手本（行隠し） ----
   const answer = tk.answerCode || '';
-  const sampleEditor = createCodeEditor(main.querySelector('.sample-editor'), { value: '', readOnly: true, label: 'お手本' });
+  const sampleEditor = createCodeEditor(main.querySelector('.sample-editor'), {
+    value: '',
+    readOnly: true,
+    label: 'お手本',
+    noCopy: !config.allowSampleCopy,
+    // panel は後で作られるが、コピー操作は画面表示後にしか起きないので参照できる
+    onCopyBlocked: () => panel.master.say('お手本は写せぬ。自分の手で打つのじゃ。'),
+  });
   const hidden = tk.hiddenLines || autoHiddenLines(answer);
 
   // ---- 学習者のコード ----

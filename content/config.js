@@ -44,4 +44,7 @@ export const config = {
 
   // 課題を始めた後に解説を見たとき、宝箱をいくつ減らすか（宝箱は最低1つは残る。0 にすると減らさない）
   explainPenalty: 1,
+
+  // 課題のお手本をコピーできるか（false：コピー・切り取り・ドラッグで持ち出せない。打った方が身につくため）
+  allowSampleCopy: false,
 };
