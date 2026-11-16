@@ -25,6 +25,7 @@ export const commands = {
   randomInt:      { sig: 'randomInt(最小, 最大)', desc: '最小〜最大のでたらめな整数' },
   onFrame:        { sig: 'onFrame(() => { … });', desc: '{ } の中を1秒に約60回くりかえす' },
   keyIsDown:      { sig: 'keyIsDown("キー")', desc: 'そのキーを押している間は true。キーの名前：<code>"ArrowRight"</code>（→） <code>"ArrowLeft"</code>（←） <code>"ArrowUp"</code>（↑） <code>"ArrowDown"</code>（↓） <code>" "</code>（スペース）。キャンバスをクリックしてから押す' },
+  waitKey:        { sig: 'let key = waitKey();', desc: 'キーが押されるまで待ち、押されたキーの名前を返す（<code>"1"</code> <code>"a"</code> <code>"ArrowUp"</code> <code>" "</code> など）。キャンバスをクリックしてから押す' },
   mouseX:         { sig: 'mouseX() / mouseY()', desc: 'マウスの位置' },
   mouseIsPressed: { sig: 'mouseIsPressed()', desc: 'マウスのボタンを押している間は true' },
   WIDTH:          { sig: 'WIDTH / HEIGHT', desc: 'キャンバスの幅と高さ（400）' },

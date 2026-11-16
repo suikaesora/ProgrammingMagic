@@ -26,6 +26,17 @@ const SHADOWED = [
 /** 1区切り（1フレームや1ステップ）で実行できる命令数の上限 */
 export const OPS_LIMIT = 3_000_000;
 
+/**
+ * waitKey() の呼び出しで、ジェネレータがキー入力待ちを知らせるための目印。
+ * Runner は gen.next() でこれを受け取ったら止まり、キーが押されたら gen.next(キー) で再開する。
+ */
+export const WAIT_KEY = Object.freeze({ waitKey: true });
+
+/** コードの中で waitKey を使っているか（使っていればジェネレータで実行する必要がある） */
+export function usesWaitKey(code) { return /\bwaitKey\b/.test(code); }
+
+export const WAIT_IN_CALLBACK = 'waitKey() は onFrame などの命令にわたした関数や、obj.名前() { } の形で書いた関数の中では使えません';
+
 export function createHooks() {
   const genOf = new WeakMap();  // 通常関数 → ジェネレータ版
   const gens = new WeakSet();   // ジェネレータ版そのもの
@@ -39,6 +50,8 @@ export function createHooks() {
     if (typeof f !== 'function') {
       throw new TypeError(`${label ?? 'それ'} is not a function`);
     }
+    // キー入力待ち：Runner まで目印を届け、再開時に渡されたキーを返す
+    if (f.isWaitKey) return yield WAIT_KEY;
     const g = genOf.get(f) || (gens.has(f) ? f : null);
     if (g) return yield* g.apply(thisArg, args);
     return f.apply(thisArg, args);
@@ -59,7 +72,10 @@ export function createHooks() {
     // ジェネレータを止まらずに最後まで動かす（ネイティブから呼ばれた関数用）
     __drive(it) {
       let r;
-      while (!(r = it.next()).done) { /* 停止点は読み飛ばす */ }
+      while (!(r = it.next()).done) {
+        // 停止点は読み飛ばす。キー入力待ちは、ここ（命令から呼ばれた関数の中）では待てない
+        if (r.value === WAIT_KEY) throw new Error(WAIT_IN_CALLBACK);
+      }
       return r.value;
     },
     __call(f, args, label) { return invoke(f, undefined, args, label); },

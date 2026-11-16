@@ -170,7 +170,7 @@ export function createVisualPanel(host, o) {
       appendError(info);
       if (currentEditor && info.userLine) currentEditor.markLine(info.userLine, 'error');
       if (!(runner.mode === 'step')) {
-        master.say(`エラーが出たようじゃ。${info.userLine ? `<b>${info.userLine}行目</b>あたりを` : 'コードを'}見直してみよ。`);
+        master.say(`エラーが出たようだわ。あわてずに${info.userLine ? `<b>${info.userLine}行目</b>あたりを` : 'コードを'}見直すのだぞよ。`);
       }
       bus.emit('run:error', info);
     },
@@ -215,7 +215,7 @@ export function createVisualPanel(host, o) {
     const tp = btn('toggle-pause');
     tp.disabled = s !== 'running' && s !== 'paused';
     tp.textContent = s === 'paused' ? '▶ つづける' : '❚❚ 一時停止';
-    btn('stop').disabled = s !== 'running' && s !== 'paused';
+    btn('stop').disabled = s !== 'running' && s !== 'paused' && s !== 'waiting';
     btn('step-one').classList.toggle('btn-primary', step && s === 'paused' && !isSample);
     const sr = btn('sample-run');
     if (sr) sr.disabled = sampleUsed;
@@ -238,6 +238,10 @@ export function createVisualPanel(host, o) {
       icon = '❚❚';
       text = `一時停止中${at}`; // 次に押すボタン（1行すすめる）はボタン側の強調で示す
       cls = 'is-paused';
+    } else if (s === 'waiting') {
+      icon = '⌨';
+      text = `キーを押してね${at}`;
+      cls = 'is-waiting';
     } else if (s === 'done') {
       icon = '✓';
       text = '実行おわり';
@@ -249,6 +253,7 @@ export function createVisualPanel(host, o) {
     }
     if (isSample && s !== 'idle') text = `お手本：${text}`;
     statusEl.className = `vp-status ${cls}`;
+    statusEl.title = s === 'waiting' ? 'キャンバスをクリックしてから、キーを押そう' : '';
     statusIcon.textContent = icon;
     statusText.textContent = text;
   }
@@ -260,6 +265,7 @@ export function createVisualPanel(host, o) {
       case 'run': start('normal'); break;
       case 'step-auto': start('step-auto'); break;
       case 'step-one':
+        if (runner.state === 'waiting') { canvas.focus({ preventScroll: true }); break; } // キーが押されるまで進めない
         if (runner.mode === 'step' && runner.state === 'paused' && !isSample) runner.stepOnce();
         else start('step-one');
         break;

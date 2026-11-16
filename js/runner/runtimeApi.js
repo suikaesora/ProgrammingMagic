@@ -4,12 +4,13 @@
 
 import { formatValue } from '../core/format.js';
 import { getSprite, spriteNames } from './sprites.js';
+import { WAIT_IN_CALLBACK } from './sandbox.js';
 
 const DEFAULTS = { fill: '#f08a5d', stroke: '#3b342c', lineWidth: 2 };
 const MAX_RECORDS = 20000;
 const MAX_LOGS = 1000;
 
-export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () => {} } = {}) {
+export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () => {}, onKey = () => {} } = {}) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width;
   const H = canvas.height;
@@ -23,9 +24,9 @@ export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () =>
   let destroyed = false;
 
   const record = (type, args) => {
-    if (drawCalls.length < MAX_RECORDS) {
-      drawCalls.push({ type, args, fill: st.useFill ? st.fill : null, stroke: st.useStroke ? st.stroke : null });
-    }
+    // onFrame で長く動かしても、いちばん新しい描画は必ず残るように、あふれたら古い半分を捨てる
+    if (drawCalls.length >= MAX_RECORDS) drawCalls.splice(0, MAX_RECORDS / 2);
+    drawCalls.push({ type, args, fill: st.useFill ? st.fill : null, stroke: st.useStroke ? st.stroke : null });
   };
   const num = (v, name) => {
     if (typeof v !== 'number' || Number.isNaN(v)) throw new TypeError(`${name} には数を入れてください（今は ${formatValue(v, 1)}）`);
@@ -47,9 +48,21 @@ export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () =>
     mouse.y = Math.round(((e.clientY - r.top) / r.height) * H);
   };
   const GAME_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ']);
+  // 日本語入力がオンのとき e.key は "Process" になるので、e.code から元のキーを求める
+  const keyName = (e) => {
+    if (e.key !== 'Process' && e.key !== 'Unidentified') return e.key;
+    const m = /^(?:Digit|Numpad)(\d)$/.exec(e.code) || /^Key([A-Z])$/.exec(e.code);
+    if (m) return m[1].toLowerCase();
+    return e.code === 'Space' ? ' ' : e.key;
+  };
   const listeners = {
-    keydown: (e) => { keys.add(e.key); if (GAME_KEYS.has(e.key)) e.preventDefault(); },
-    keyup: (e) => { keys.delete(e.key); },
+    keydown: (e) => {
+      const k = keyName(e);
+      keys.add(k);
+      if (GAME_KEYS.has(k)) e.preventDefault();
+      if (!e.repeat) onKey(k); // waitKey() で待っている Runner に知らせる
+    },
+    keyup: (e) => { keys.delete(keyName(e)); },
     blur: () => { keys.clear(); mouse.down = false; },
     pointermove: toCanvas,
     pointerdown: (e) => { toCanvas(e); mouse.down = true; canvas.focus(); },
@@ -148,6 +161,12 @@ export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () =>
 
     // 入力
     keyIsDown(key) { return keys.has(key) || (typeof key === 'string' && keys.has(key.toLowerCase())); },
+    /**
+     * キーが押されるまで待ち、押されたキーの名前を返す（"1"、"a"、"ArrowUp"、" " など）。
+     * 実際の待ち合わせは Runner が行う（sandbox.js の invoke が isWaitKey を見て止まる）。
+     * ここが直接呼ばれるのは、待てない場所（命令にわたした関数の中など）で使われたとき。
+     */
+    waitKey() { throw new Error(WAIT_IN_CALLBACK); },
     mouseX() { return mouse.x; },
     mouseY() { return mouse.y; },
     mouseIsPressed() { return mouse.down; },
@@ -158,6 +177,8 @@ export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () =>
     clearTimeout(id) { window.clearTimeout(id); },
     clearInterval(id) { window.clearInterval(id); },
   };
+
+  api.waitKey.isWaitKey = true;
 
   return {
     api,
@@ -196,6 +217,7 @@ export const API_DOC = [
   ['random(最小, 最大) / randomInt(最小, 最大)', '乱数'],
   ['onFrame(関数)', '毎フレーム実行'],
   ['keyIsDown("ArrowRight")', 'キーが押されているか'],
+  ['waitKey()', 'キーが押されるまで待ち、押されたキーの名前を返す'],
   ['mouseX() / mouseY() / mouseIsPressed()', 'マウス'],
   ['WIDTH / HEIGHT', 'キャンバスの大きさ'],
 ];

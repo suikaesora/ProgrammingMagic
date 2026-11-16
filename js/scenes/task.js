@@ -10,6 +10,7 @@ import { getAttempt, saveAttempt, recordClear, isCleared } from '../core/progres
 import { config } from '../../content/config.js';
 import { commands } from '../../content/commands.js';
 import { sprites } from '../../content/sprites.js';
+import { spriteImage } from '../runner/sprites.js';
 import { escapeHtml } from '../core/format.js';
 import { session } from '../core/session.js';
 import { bus } from '../core/bus.js';
@@ -21,14 +22,16 @@ const HINT_AFTER_FRAMES = 900; // アニメーション課題で、この回数�
  * 「つかう命令」メモ。命令の書き方は課題の本質ではないので、見ても宝箱は減らない。
  * refs の要素は content/commands.js の名前か、{ sig, desc } オブジェクト。
  */
-function refsHtml(refs) {
+function refsHtml(refs, spriteList) {
   if (!refs || !refs.length) return '';
   const items = refs.map((r) => {
     const c = typeof r === 'string' ? commands[r] : r;
     if (!c) { console.warn(`content/commands.js に命令 "${r}" がありません`); return ''; }
     // render のときは、使える画像を見本つきで並べる（画像名を覚えていなくても書けるように）
-    const gallery = r === 'render' ? `<span class="refs-sprites">${Object.entries(sprites).map(([name, s]) => `
-      <span class="refs-sprite" title="${escapeHtml(s.name || name)}"><img src="${escapeHtml(s.image)}" alt=""><code>"${escapeHtml(name)}"</code></span>`).join('')}</span>` : '';
+    // task.sprites があればその画像だけ、なければ登録されているすべての画像
+    const names = (spriteList && spriteList.length ? spriteList : Object.keys(sprites)).filter((n) => sprites[n]);
+    const gallery = r === 'render' ? `<span class="refs-sprites">${names.map((name) => `
+      <span class="refs-sprite" title="${escapeHtml(sprites[name].name || name)}"><img src="${escapeHtml(spriteImage(name))}" alt=""><code>"${escapeHtml(name)}"</code><span class="refs-sprite-name">${escapeHtml(sprites[name].name || '')}</span></span>`).join('')}</span>` : '';
     return `<li><code class="refs-sig">${escapeHtml(c.sig)}</code><span class="refs-desc">${c.desc || ''}</span>${gallery}</li>`;
   }).join('');
   return `
@@ -54,7 +57,7 @@ export function mount(root, { lesson }) {
         <div class="pane-head">課題</div>
         <div class="problem-body">
           <article class="prose">${tk.problemHtml || ''}</article>
-          ${refsHtml(tk.refs)}
+          ${refsHtml(tk.refs, tk.sprites)}
         </div>
       </section>
       <div class="task-codes">
@@ -82,7 +85,7 @@ export function mount(root, { lesson }) {
     label: 'お手本',
     noCopy: !config.allowSampleCopy,
     // panel は後で作られるが、コピー操作は画面表示後にしか起きないので参照できる
-    onCopyBlocked: () => panel.master.say('お手本は写せぬ。自分の手で打つのじゃ。'),
+    onCopyBlocked: () => panel.master.say('お手本は写せぬわ。自分の手で打つから身につくのだぞよ。'),
   });
   const hidden = tk.hiddenLines || autoHiddenLines(answer);
 
@@ -111,7 +114,7 @@ export function mount(root, { lesson }) {
   const panel = createVisualPanel(main.querySelector('.pane-visual'), {
     lesson,
     kind: 'task',
-    masterLines: tk.master || ['課題を読んで、右下にコードを書くのじゃ。'],
+    masterLines: tk.master || ['課題をよく読んで、右下にコードを書くのだぞよ。'],
     sampleRunUsed: attempt.sampleRunUsed,
     getTarget: () => ({ program: buildProgram(lesson.template, userEditor.getValue()), editor: userEditor }),
     getSampleTarget: () => ({ program: buildProgram(lesson.template, answer) }),
@@ -125,12 +128,12 @@ export function mount(root, { lesson }) {
         onClear(runner);
       } else if (result.frames >= HINT_AFTER_FRAMES && !hinted) {
         hinted = true;
-        panel.master.say(tk.failMessage || 'まだクリアではないようじゃ。課題をもう一度読んでみよ。');
+        panel.master.say(tk.failMessage || 'まだクリアではないようだわ。課題をもう一度読んでみるのだぞよ。');
       }
     },
     onState: (state, mode, isSample) => {
       if (state === 'done' && !isSample && !cleared) {
-        panel.master.say(tk.failMessage || 'まだクリアではないようじゃ。課題をもう一度読んでみよ。');
+        panel.master.say(tk.failMessage || 'まだクリアではないようだわ。課題をもう一度読んでみるのだぞよ。');
       }
     },
   });

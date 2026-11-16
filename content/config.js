@@ -1,15 +1,15 @@
 // 教材全体の設定。文言や画像パスはここで変更できます。
 
 export const config = {
-  appTitle: 'コード修行',
-  appSubtitle: 'JavaScript でゲームづくりの道をゆく',
+  appTitle: 'プログラミング魔法修行',
+  appSubtitle: '大魔法使いゾルクの元で、ゲームを作る魔法を学ぼう',
 
   // キャンバスの大きさ（わかりやすい数）
   canvas: { width: 400, height: 400 },
 
-  // 師匠
+  // 師匠（大魔法使いゾルク）
   master: {
-    name: '師匠',
+    name: 'ゾルク',
     image: 'assets/master/master.svg',
   },
 
@@ -17,6 +17,7 @@ export const config = {
   avatars: [
     { id: 'a', label: 'すがた ひとつめ', image: 'assets/avatar/a.svg' },
     { id: 'b', label: 'すがた ふたつめ', image: 'assets/avatar/b.svg' },
+    // ※ 選んだ姿は、修行の中で render(x, y, "ren") と書いたときにも使われます
   ],
 
   // 認定証（1枚の画像。差し替えはこのパスの画像を置き換えるだけ）

@@ -8,6 +8,7 @@ import * as task from './scenes/task.js';
 import * as clear from './scenes/clear.js';
 import * as cert from './scenes/cert.js';
 import * as deco from './scenes/deco.js';
+import * as epilogue from './scenes/epilogue.js';
 
 const routes = [
   { re: /^\/intro$/, scene: intro, name: 'intro' },
@@ -15,6 +16,7 @@ const routes = [
   { re: /^\/lesson\/([\w-]+)\/explain$/, scene: explain, name: 'explain', lesson: true },
   { re: /^\/lesson\/([\w-]+)\/task$/, scene: task, name: 'task', lesson: true },
   { re: /^\/clear\/([\w-]+)$/, scene: clear, name: 'clear', lesson: true },
+  { re: /^\/epilogue$/, scene: epilogue, name: 'epilogue' },
   { re: /^\/cert$/, scene: cert, name: 'cert' },
   { re: /^\/deco$/, scene: deco, name: 'deco' },
 ];

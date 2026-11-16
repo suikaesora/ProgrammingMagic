@@ -1,5 +1,5 @@
-/* 導入部（黒い画面に白い文字） */
-.scene-intro { background: #000; min-height: 100vh; }
+/* 導入部・エピローグ（黒い画面に白い文字） */
+.scene-intro, .scene-epilogue { background: #000; min-height: 100vh; }
 .intro {
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -29,4 +29,5 @@
 .intro-avatar:hover { transform: translateY(-4px); border-color: #aaa; }
 .intro-avatar[aria-checked="true"] { border-color: var(--c-accent); background: #2a2018; transform: translateY(-4px); }
 .intro-avatar[aria-checked="true"] img { animation: jump .6s var(--ease-pop); }
-.scene-intro .btn { --btn-bg: var(--c-accent); border-color: #fff; box-shadow: 3px 3px 0 #fff; }
+.scene-epilogue .epilogue-skip { position: fixed; right: 16px; bottom: 16px; opacity: .7; }
+.scene-intro .btn, .scene-epilogue .btn { --btn-bg: var(--c-accent); border-color: #fff; box-shadow: 3px 3px 0 #fff; }

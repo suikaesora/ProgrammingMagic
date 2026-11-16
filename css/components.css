@@ -48,6 +48,17 @@
 }
 .prose ul { padding-left: 1.3em; }
 .prose img { border-radius: var(--radius-sm); border: 2px solid var(--c-line); }
+/* 解説の最後の「もっと知りたい人へ」 */
+.prose details.tips {
+  margin: 18px 0 6px; padding: 8px 14px;
+  border: 2px dashed var(--c-accent); border-radius: var(--radius-sm);
+  background: var(--c-accent-weak);
+}
+.prose details.tips > summary { cursor: pointer; font-weight: 800; }
+.prose details.tips[open] > summary { margin-bottom: 8px; }
+.prose .note { padding: 8px 12px; border-left: 4px solid var(--c-accent); background: var(--c-surface-2); border-radius: 4px; }
+.prose table { border-collapse: collapse; margin: 6px 0 12px; }
+.prose th, .prose td { border: 1.5px solid var(--c-surface-2); padding: 3px 10px; text-align: left; }
 
 /* ---- コードエディタ ---- */
 .code-editor {
@@ -199,6 +210,8 @@
 .vp-status.is-running { background: var(--c-accent-weak); color: var(--c-text); }
 .vp-status.is-running .vp-status-icon { color: var(--c-accent); animation: status-blink 1s ease-in-out infinite; }
 .vp-status.is-paused { background: var(--c-accent-weak); color: var(--c-text); }
+.vp-status.is-waiting { background: var(--c-success-weak); color: var(--c-text); }
+.vp-status.is-waiting .vp-status-icon { color: var(--c-success); animation: status-blink 1s ease-in-out infinite; }
 .vp-status.is-paused .vp-status-icon { color: var(--c-accent); }
 .vp-status.is-done { background: var(--c-success-weak); color: var(--c-text); }
 .vp-status.is-done .vp-status-icon { color: var(--c-success); }

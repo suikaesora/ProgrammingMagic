@@ -37,6 +37,7 @@ export function mount(root) {
     </div>
     <div class="cert-actions">
       <button type="button" class="btn" data-act="again">🎉 もう一度お祝い</button>
+      <a class="btn" href="#/epilogue">📖 物語をもう一度</a>
       <a class="btn" href="#/deco">🎀 装飾部屋へ</a>
       <a class="btn btn-primary" href="#/home">修行選択へ</a>
     </div>`;

@@ -52,7 +52,7 @@ export function mount(root, { lesson }) {
         <div class="clear-actions">
           <a class="btn" href="#/home">修行選択へ</a>
           ${goCert
-            ? '<a class="btn btn-primary btn-lg" href="#/cert">📜 認定へすすむ</a>'
+            ? '<a class="btn btn-primary btn-lg" href="#/epilogue">📖 物語のつづきへ</a>'
             : next ? `<a class="btn btn-primary btn-lg" href="#/lesson/${next.id}/explain">次の修行へ →</a>` : ''}
         </div>
       </div>

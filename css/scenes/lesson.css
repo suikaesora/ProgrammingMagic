@@ -48,6 +48,7 @@
 }
 .refs-sprite img { width: 36px; height: 36px; object-fit: contain; }
 .refs-sprite code { font-size: 11px; background: none; padding: 0; }
+.refs-sprite-name { font-size: 10px; color: var(--c-muted); }
 .task-codes { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; min-height: 0; }
 .pane-user { box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-accent); }
 
