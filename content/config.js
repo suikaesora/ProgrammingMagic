@@ -10,18 +10,18 @@ export const config = {
   // 師匠（大魔法使いゾルク）
   master: {
     name: 'ゾルク',
-    image: 'assets/master/master.svg',
+    image: 'assets/master/master.png',
   },
 
   // 導入部で選ぶ見た目（「男・女」という語は使わない）
   avatars: [
-    { id: 'a', label: 'すがた ひとつめ', image: 'assets/avatar/a.svg' },
-    { id: 'b', label: 'すがた ふたつめ', image: 'assets/avatar/b.svg' },
+    { id: 'a', label: 'すがた ひとつめ', image: 'assets/avatar/a.png' },
+    { id: 'b', label: 'すがた ふたつめ', image: 'assets/avatar/b.png' },
     // ※ 選んだ姿は、修行の中で render(x, y, "ren") と書いたときにも使われます
   ],
 
   // 認定証（1枚の画像。差し替えはこのパスの画像を置き換えるだけ）
-  certificateImage: 'assets/certificate.svg',
+  certificateImage: 'assets/certificate.png',
 
   // 導入部の文字送り速度（ミリ秒/文字）。句読点ではさらに待つ
   introTypeSpeed: 70,

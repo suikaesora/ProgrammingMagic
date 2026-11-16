@@ -19,7 +19,7 @@
 
 .deco-item { position: absolute; left: 0; top: 0; cursor: grab; touch-action: none; }
 .deco-item:active { cursor: grabbing; }
-.deco-item img { width: 100%; height: 100%; display: block; pointer-events: none; }
+.deco-item img { width: 100%; height: 100%; display: block; object-fit: contain; pointer-events: none; }
 .deco-item.is-selected { outline: calc(2px * var(--inv, 1)) dashed var(--c-accent); outline-offset: calc(4px * var(--inv, 1)); }
 .deco-h {
   position: absolute; display: none;
@@ -42,7 +42,7 @@
   background: var(--c-surface); border: 2px solid var(--c-line); border-radius: var(--radius-sm);
   cursor: pointer; transition: transform .12s var(--ease-pop);
 }
-.deco-cell img { width: 46px; height: 46px; }
+.deco-cell img { width: 46px; height: 46px; object-fit: contain; }
 .deco-cell:hover:not(:disabled) { transform: translateY(-3px) rotate(-2deg); background: var(--c-accent-weak); }
 .deco-cell.is-locked { cursor: default; color: var(--c-muted); border-style: dashed; border-color: var(--c-muted); }
 .deco-cell.is-locked img { filter: brightness(0); opacity: .15; }

@@ -25,7 +25,7 @@
   border: 3px solid #555; border-radius: var(--radius-lg);
   transition: transform .15s, border-color .15s;
 }
-.intro-avatar img { width: 120px; height: 150px; }
+.intro-avatar img { width: 120px; height: 150px; object-fit: contain; }
 .intro-avatar:hover { transform: translateY(-4px); border-color: #aaa; }
 .intro-avatar[aria-checked="true"] { border-color: var(--c-accent); background: #2a2018; transform: translateY(-4px); }
 .intro-avatar[aria-checked="true"] img { animation: jump .6s var(--ease-pop); }

@@ -233,7 +233,7 @@
 
 /* ---- 師匠 ---- */
 .master { display: flex; gap: 10px; align-items: flex-start; }
-.master-img { width: 76px; height: 76px; flex: none; transform-origin: bottom center; }
+.master-img { width: 76px; height: 76px; flex: none; object-fit: contain; transform-origin: bottom center; }
 .master-img.is-talk { animation: wiggle .5s ease-in-out; }
 .master-bubble {
   position: relative; flex: 1;
@@ -280,7 +280,7 @@
 }
 .tut-bubble.is-new { animation: pop-in .3s var(--ease-pop); }
 .tut-bubble.is-shake { animation: wiggle .35s; }
-.tut-master { width: 56px; height: 56px; flex: none; }
+.tut-master { width: 56px; height: 56px; flex: none; object-fit: contain; }
 .tut-body { flex: 1; }
 .tut-text { font-weight: 700; font-size: var(--fs-sm); }
 .tut-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }

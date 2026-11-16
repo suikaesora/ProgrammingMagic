@@ -35,7 +35,7 @@
 }
 .chest.is-open .chest-item { animation: item-up .7s var(--ease-pop) .15s forwards; }
 @keyframes item-up { to { opacity: 1; transform: translateY(-14px) scale(1); } }
-.chest-item img { width: 64px; height: 64px; }
+.chest-item img { width: 64px; height: 64px; object-fit: contain; }
 .chest-item-name { font-weight: 800; font-size: var(--fs-sm); background: var(--c-surface); border: 2px solid var(--c-line); border-radius: 999px; padding: 0 10px; white-space: nowrap; }
 .chest-item-note { font-size: 11px; color: var(--c-success); font-weight: 700; }
 .clear-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
