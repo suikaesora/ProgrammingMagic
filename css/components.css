@@ -75,6 +75,11 @@
   position: absolute; top: 0; left: 0; min-width: 100%;
   pointer-events: none; color: var(--c-text); will-change: transform;
 }
+/* base.css のインライン code 用スタイル（font-size: .92em など）を打ち消す。
+   textarea と文字幅がずれるとカーソル位置が合わなくなるため */
+.ce-highlight code {
+  font: inherit; padding: 0; margin: 0; border: 0; border-radius: 0; background: none;
+}
 .ce-input {
   position: absolute; inset: 0; width: 100%; height: 100%;
   resize: none; border: 0; outline: none; overflow: auto;
