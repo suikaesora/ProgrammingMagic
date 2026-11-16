@@ -4,8 +4,10 @@ import { applyTheme } from './core/theme.js';
 import { store } from './core/storage.js';
 import { getLessons } from './core/progress.js';
 import { config } from '../content/config.js';
+import { loadSprites } from './runner/sprites.js';
 
 document.title = config.appTitle;
+loadSprites(); // render() で使う画像を先に読み込んでおく
 applyTheme();
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
 

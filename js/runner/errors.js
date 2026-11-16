@@ -25,6 +25,8 @@ export function friendlyMessage(err) {
     const m = msg.match(re);
     if (m) return fn(m);
   }
+  // 命令（runtimeApi.js）が出す日本語のエラーは、そのまま学習者向けの説明として使う
+  if (/[ぁ-んァ-ヶ一-龠]/.test(msg)) return msg;
   return null;
 }
 

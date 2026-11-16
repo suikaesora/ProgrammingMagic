@@ -41,6 +41,13 @@
 .refs-sig { align-self: flex-start; font-size: 13px; font-weight: 600; }
 .refs-desc { color: var(--c-muted); line-height: 1.5; }
 .refs-desc code { font-size: 12px; }
+.refs-sprites { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+.refs-sprite {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 4px 6px; border-radius: var(--radius-sm); background: var(--c-surface-2);
+}
+.refs-sprite img { width: 36px; height: 36px; object-fit: contain; }
+.refs-sprite code { font-size: 11px; background: none; padding: 0; }
 .task-codes { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; min-height: 0; }
 .pane-user { box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--c-accent); }
 

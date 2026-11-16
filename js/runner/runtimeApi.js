@@ -3,6 +3,7 @@
 // 描画命令は drawCalls に記録され、クリア判定（check）で使える。
 
 import { formatValue } from '../core/format.js';
+import { getSprite, spriteNames } from './sprites.js';
 
 const DEFAULTS = { fill: '#f08a5d', stroke: '#3b342c', lineWidth: 2 };
 const MAX_RECORDS = 20000;
@@ -114,6 +115,19 @@ export function createRuntime(canvas, { onPrint = () => {}, onAsyncError = () =>
       ctx.fillText(String(str), x, y);
       record('text', [String(str), x, y, size]);
     },
+    /** 登録した画像を (x, y) がまんなかになるように描く。width を省略すると登録した標準の幅 */
+    render(x, y, name, width) {
+      num(x, 'x'); num(y, 'y');
+      const sp = getSprite(name);
+      if (!sp) {
+        throw new TypeError(`画像「${formatValue(name)}」は登録されていません。使える画像：${spriteNames().join(', ')}`);
+      }
+      if (!sp.img) throw new Error(`画像「${name}」を読み込めませんでした`);
+      const w = width === undefined ? sp.width : num(width, '幅');
+      const h = w * sp.aspect;
+      ctx.drawImage(sp.img, x - w / 2, y - h / 2, w, h);
+      record('render', [x, y, name, w, h]);
+    },
 
     // 乱数
     random(min, max) {
@@ -178,6 +192,7 @@ export const API_DOC = [
   ['rect(x, y, 幅, 高さ)', '四角形'],
   ['line(x1, y1, x2, y2)', '線'],
   ['text(文字, x, y, 大きさ)', '文字'],
+  ['render(x, y, "画像名", 幅)', '登録した画像（content/sprites.js）。(x, y) がまんなか'],
   ['random(最小, 最大) / randomInt(最小, 最大)', '乱数'],
   ['onFrame(関数)', '毎フレーム実行'],
   ['keyIsDown("ArrowRight")', 'キーが押されているか'],

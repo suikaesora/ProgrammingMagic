@@ -20,6 +20,7 @@ export const commands = {
   rect:           { sig: 'rect(x, y, 幅, 高さ)', desc: '(x, y) を左上にして四角形をかく' },
   line:           { sig: 'line(x1, y1, x2, y2)', desc: '2つの点を結ぶ線をかく' },
   text:           { sig: 'text("文字", x, y, 大きさ)', desc: 'キャンバスに文字をかく' },
+  render:         { sig: 'render(x, y, "画像名", 幅)', desc: '(x, y) がまんなかになるように画像をかく。幅は省略できる（縦横の比はそのまま）。使える画像は下のとおり' },
   random:         { sig: 'random(最小, 最大)', desc: '最小〜最大のでたらめな数（小数）' },
   randomInt:      { sig: 'randomInt(最小, 最大)', desc: '最小〜最大のでたらめな整数' },
   onFrame:        { sig: 'onFrame(() => { … });', desc: '{ } の中を1秒に約60回くりかえす' },

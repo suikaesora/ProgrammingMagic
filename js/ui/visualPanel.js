@@ -6,6 +6,7 @@ import { config } from '../../content/config.js';
 import { lessonLabel } from '../core/progress.js';
 import { bus } from '../core/bus.js';
 import { escapeHtml, formatForVars, UNINIT } from '../core/format.js';
+import { spritesReady } from '../runner/sprites.js';
 
 const SPEEDS = [1200, 700, 400, 180, 60]; // ミリ秒/ステップ（遅い→速い）
 
@@ -197,7 +198,8 @@ export function createVisualPanel(host, o) {
     if (sample) appendLog('― お手本を実行中 ―', 'is-note');
   }
 
-  function start(mode) {
+  async function start(mode) {
+    await spritesReady(); // render() の画像を読み込み終えてから実行する（初回以外は待ち時間なし）
     const target = o.getTarget();
     prepareRun(target, false);
     if (mode === 'normal') runner.runNormal(target.program);
@@ -273,11 +275,14 @@ export function createVisualPanel(host, o) {
         if (!t) return;
         sampleUsed = true;
         o.onSampleRunUsed?.();
-        prepareRun({ editor: null }, true);
-        runner.runNormal(t.program);
-        canvas.focus({ preventScroll: true });
         updateButtons();
-        bus.emit('sample:run');
+        spritesReady().then(() => {
+          prepareRun({ editor: null }, true);
+          runner.runNormal(t.program);
+          canvas.focus({ preventScroll: true });
+          updateButtons();
+          bus.emit('sample:run');
+        });
         break;
       }
       default: break;

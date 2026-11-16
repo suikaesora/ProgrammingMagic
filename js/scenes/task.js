@@ -9,6 +9,7 @@ import { store } from '../core/storage.js';
 import { getAttempt, saveAttempt, recordClear, isCleared } from '../core/progress.js';
 import { config } from '../../content/config.js';
 import { commands } from '../../content/commands.js';
+import { sprites } from '../../content/sprites.js';
 import { escapeHtml } from '../core/format.js';
 import { session } from '../core/session.js';
 import { bus } from '../core/bus.js';
@@ -25,7 +26,10 @@ function refsHtml(refs) {
   const items = refs.map((r) => {
     const c = typeof r === 'string' ? commands[r] : r;
     if (!c) { console.warn(`content/commands.js に命令 "${r}" がありません`); return ''; }
-    return `<li><code class="refs-sig">${escapeHtml(c.sig)}</code><span class="refs-desc">${c.desc || ''}</span></li>`;
+    // render のときは、使える画像を見本つきで並べる（画像名を覚えていなくても書けるように）
+    const gallery = r === 'render' ? `<span class="refs-sprites">${Object.entries(sprites).map(([name, s]) => `
+      <span class="refs-sprite" title="${escapeHtml(s.name || name)}"><img src="${escapeHtml(s.image)}" alt=""><code>"${escapeHtml(name)}"</code></span>`).join('')}</span>` : '';
+    return `<li><code class="refs-sig">${escapeHtml(c.sig)}</code><span class="refs-desc">${c.desc || ''}</span>${gallery}</li>`;
   }).join('');
   return `
     <aside class="problem-refs" aria-label="つかう命令">
