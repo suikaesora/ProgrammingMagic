@@ -15,6 +15,7 @@
 .clear-rate-bar { width: 120px; height: 10px; border: 2px solid var(--c-line); border-radius: 999px; overflow: hidden; background: var(--c-surface); }
 .clear-rate-bar span { display: block; height: 100%; background: var(--c-accent); }
 .clear-chest-note { font-size: var(--fs-sm); }
+.clear-penalty { font-size: var(--fs-xs); color: var(--c-muted); }
 
 .chests { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin: 16px 0 24px; min-height: 160px; }
 .chest {

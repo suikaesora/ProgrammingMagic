@@ -6,24 +6,52 @@ import { createVisualPanel } from '../ui/visualPanel.js';
 import { mountTutorial } from '../ui/tutorial.js';
 import { buildProgram } from '../runner/template.js';
 import { store } from '../core/storage.js';
-import { getAttempt, saveAttempt, recordClear } from '../core/progress.js';
+import { getAttempt, saveAttempt, recordClear, isCleared } from '../core/progress.js';
+import { config } from '../../content/config.js';
+import { commands } from '../../content/commands.js';
+import { escapeHtml } from '../core/format.js';
 import { session } from '../core/session.js';
 import { bus } from '../core/bus.js';
 import { go } from '../router.js';
 
 const HINT_AFTER_FRAMES = 900; // アニメーション課題で、この回数フレームが進んでもクリアしなければヒント
 
+/**
+ * 「つかう命令」メモ。命令の書き方は課題の本質ではないので、見ても宝箱は減らない。
+ * refs の要素は content/commands.js の名前か、{ sig, desc } オブジェクト。
+ */
+function refsHtml(refs) {
+  if (!refs || !refs.length) return '';
+  const items = refs.map((r) => {
+    const c = typeof r === 'string' ? commands[r] : r;
+    if (!c) { console.warn(`content/commands.js に命令 "${r}" がありません`); return ''; }
+    return `<li><code class="refs-sig">${escapeHtml(c.sig)}</code><span class="refs-desc">${c.desc || ''}</span></li>`;
+  }).join('');
+  return `
+    <aside class="problem-refs" aria-label="つかう命令">
+      <div class="refs-head">📒 つかう命令 <span class="muted">（見ても宝箱は減らないぞ）</span></div>
+      <ul class="refs-list">${items}</ul>
+    </aside>`;
+}
+
 export function mount(root, { lesson }) {
   const tk = lesson.task || {};
   const attempt = getAttempt(lesson.id);
-  root.appendChild(lessonHeader(lesson, 'task'));
+  const firstTry = !isCleared(lesson.id);
+  // 課題を始めた印（これ以降に解説を見ると宝箱が減る）
+  if (firstTry && !attempt.taskStarted) saveAttempt(lesson.id, { taskStarted: true });
+  const explainPenalty = (config.explainPenalty ?? 1) > 0;
+  root.appendChild(lessonHeader(lesson, 'task', { explainWarn: firstTry && explainPenalty && !attempt.explainViewed }));
   const main = document.createElement('main');
   main.className = 'layout-task';
   main.innerHTML = `
     <div class="task-left">
       <section class="pane pane-problem card" data-tut="problem">
         <div class="pane-head">課題</div>
-        <article class="prose">${tk.problemHtml || ''}</article>
+        <div class="problem-body">
+          <article class="prose">${tk.problemHtml || ''}</article>
+          ${refsHtml(tk.refs)}
+        </div>
       </section>
       <div class="task-codes">
         <section class="pane pane-code card" data-tut="task-sample">
@@ -102,6 +130,7 @@ export function mount(root, { lesson }) {
     bus.emit('reveal', { opened });
   });
   panel.setRevealRate(covers.openedCount, covers.total);
+  if (firstTry && explainPenalty && attempt.explainViewed) panel.setExplainViewed(true);
 
   let leaveTimer = null;
   function onClear(runner) {

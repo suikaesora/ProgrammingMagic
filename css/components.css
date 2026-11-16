@@ -20,6 +20,13 @@
   color: var(--c-muted); text-decoration: none;
 }
 .tab.is-active { background: var(--c-surface); color: var(--c-text); border: 2px solid var(--c-line); }
+/* 課題の途中で見ると宝箱が減る注意マーク */
+.tab-warn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.3em; height: 1.3em; margin-left: 4px; border-radius: 50%;
+  background: var(--c-danger); color: var(--c-on-accent);
+  font-size: 11px; font-weight: 800; line-height: 1; vertical-align: 1px;
+}
 
 /* ---- パネル ---- */
 .pane { display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
@@ -131,6 +138,11 @@
 .vp-rate-bar { flex: 1; height: 10px; border: 2px solid var(--c-line); border-radius: 999px; overflow: hidden; background: var(--c-surface-2); }
 .vp-rate-fill { display: block; height: 100%; width: 0; background: var(--c-accent); transition: width .4s var(--ease-pop); }
 .vp-rate-text { font-weight: 700; min-width: 76px; text-align: right; }
+.vp-explain-viewed {
+  align-self: flex-start; font-size: var(--fs-xs); font-weight: 700;
+  padding: 1px 8px; border-radius: 999px;
+  background: var(--c-danger-weak); color: var(--c-text);
+}
 
 .vp-stage { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
 .vp-canvas-wrap { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: min(400px, 46vh); margin: 0 auto; }

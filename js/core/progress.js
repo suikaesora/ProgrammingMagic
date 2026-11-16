@@ -37,10 +37,22 @@ export function currentLesson() {
   return lessons.find((l) => !isCleared(l.id) && isUnlocked(l.id)) || lessons[lessons.length - 1];
 }
 
-// ---- 挑戦中の状態（行隠しの解放・お手本実行の使用） ----
+// ---- 挑戦中の状態（行隠しの解放・お手本実行の使用・課題開始後に解説を見たか） ----
 export function getAttempt(id) {
   const a = store.get().attempts[id];
-  return { opened: a?.opened ? [...a.opened] : [], sampleRunUsed: !!a?.sampleRunUsed };
+  return {
+    opened: a?.opened ? [...a.opened] : [],
+    sampleRunUsed: !!a?.sampleRunUsed,
+    taskStarted: !!a?.taskStarted,     // 課題パートを一度でも開いた
+    explainViewed: !!a?.explainViewed, // 課題を始めた後に解説を見た（宝箱が減る）
+  };
+}
+
+/** 解説を開くと宝箱が減る状態か（未クリアで、課題を始めていて、まだ解説を見ていない） */
+export function explainWouldPenalize(id) {
+  if (isCleared(id)) return false;
+  const a = getAttempt(id);
+  return a.taskStarted && !a.explainViewed;
 }
 
 export function saveAttempt(id, patch) {
@@ -57,7 +69,8 @@ export function recordClear(id, rate) {
   const lesson = getLesson(id);
   const first = !isCleared(id);
   const wasAll = allCleared();
-  const count = chestCount(rate);
+  const explainViewed = first && getAttempt(id).explainViewed;
+  const count = Math.max(1, chestCount(rate) - (explainViewed ? (config.explainPenalty ?? 1) : 0));
   const chestItems = (lesson.items || []).slice(0, count);
   store.update((s) => {
     const prev = s.progress[id];
@@ -76,6 +89,7 @@ export function recordClear(id, rate) {
     rate,
     firstClear: first,
     chestItems,
+    explainViewed,
     justCompletedAll: !wasAll && allCleared(),
   };
 }

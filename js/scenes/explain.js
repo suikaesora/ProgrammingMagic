@@ -3,11 +3,39 @@ import { lessonHeader } from '../ui/header.js';
 import { createCodeEditor } from '../editor/codeEditor.js';
 import { createVisualPanel } from '../ui/visualPanel.js';
 import { mountTutorial } from '../ui/tutorial.js';
+import { confirmModal } from '../ui/modal.js';
 import { buildProgram } from '../runner/template.js';
+import { explainWouldPenalize, saveAttempt } from '../core/progress.js';
+import { config } from '../../content/config.js';
 import { bus } from '../core/bus.js';
 import { go } from '../router.js';
 
 export function mount(root, { lesson }) {
+  // 課題を始めた後に解説を開くと宝箱が減る。確認が済むまで中身は組み立てない
+  // （ダイアログの後ろに解説が透けて見えないように）
+  if ((config.explainPenalty ?? 1) > 0 && explainWouldPenalize(lesson.id)) {
+    let disposed = false;
+    let cleanup = null;
+    root.appendChild(lessonHeader(lesson, 'explain'));
+    const n = config.explainPenalty ?? 1;
+    confirmModal(`課題の途中で解説を見ると、宝箱が${n}つ減ります。\n（宝箱は最低1つは残ります）`, { ok: '解説を見る', cancel: '課題にもどる' })
+      .then((ok) => {
+        if (disposed) return;
+        if (!ok) { go(`#/lesson/${lesson.id}/task`); return; }
+        saveAttempt(lesson.id, { explainViewed: true });
+        root.innerHTML = '';
+        cleanup = build(root, lesson);
+      });
+    return () => {
+      disposed = true;
+      document.querySelector('.modal-backdrop')?.remove();
+      cleanup?.();
+    };
+  }
+  return build(root, lesson);
+}
+
+function build(root, lesson) {
   const ex = lesson.explain || {};
   root.appendChild(lessonHeader(lesson, 'explain'));
   const main = document.createElement('main');

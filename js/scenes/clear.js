@@ -40,7 +40,7 @@ export function mount(root, { lesson }) {
           <span class="clear-rate-bar"><span style="width:${pct}%"></span></span>
         </div>
         <p class="clear-chest-note">${info.firstClear
-          ? `宝箱が <strong>${info.chestItems.length}個</strong> 出てきた！ クリックして開けよう。`
+          ? `宝箱が <strong>${info.chestItems.length}個</strong> 出てきた！ クリックして開けよう。${info.explainViewed ? '<br><span class="clear-penalty">（課題の途中で解説を見たので、宝箱が1つ減りました）</span>' : ''}`
           : '宝箱の中身は、はじめてクリアしたときに受け取りずみです。'}</p>
         <div class="chests">
           ${info.chestItems.map((id, i) => `

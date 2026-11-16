@@ -41,4 +41,7 @@ export const config = {
     if (rate < 2 / 3) return 2;
     return 1;
   },
+
+  // 課題を始めた後に解説を見たとき、宝箱をいくつ減らすか（宝箱は最低1つは残る。0 にすると減らさない）
+  explainPenalty: 1,
 };

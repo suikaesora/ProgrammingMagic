@@ -299,6 +299,19 @@ export function createVisualPanel(host, o) {
       fill.style.width = `${Math.round(rate * 100)}%`;
       text.textContent = `${opened}/${total}（${Math.round(rate * 100)}%）`;
     },
+    /** 課題を始めた後に解説を見た印を修行情報に出す */
+    setExplainViewed(on) {
+      const rate = host.querySelector('.vp-rate');
+      if (!rate) return;
+      let b = host.querySelector('.vp-explain-viewed');
+      if (on && !b) {
+        b = document.createElement('span');
+        b.className = 'vp-explain-viewed';
+        b.title = '課題の途中で解説を見たので、宝箱が1つ減ります';
+        b.textContent = '📖 解説を見た（宝箱−1）';
+        rate.after(b);
+      } else if (!on && b) b.remove();
+    },
     flashClear(text = 'クリア！') {
       flash.textContent = text;
       flash.classList.remove('is-on');

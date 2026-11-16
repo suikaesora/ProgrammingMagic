@@ -31,12 +31,12 @@ for (let i = 0; i < 5; i++) {
       <p>for 文を使って、半径 15 の円を <strong>10個</strong>、横一列にならべよう。</p>
       <p>x 座標は 20, 60, 100, … と <strong>40ずつ</strong> 増やし、y 座標は 200 にしよう。</p>
     `,
-    answerCode: `fill("skyblue");
-for (let i = 0; i < 10; i++) {
+    answerCode: `for (let i = 0; i < 10; i++) {
   circle(20 + i * 40, 200, 15);
 }`,
-    hiddenLines: [1, 2, 3],
+    hiddenLines: [1, 2],
     starterCode: '',
+    refs: ['circle'],
     failMessage: '円の数と、x 座標の増え方をたしかめよう。',
   },
 

@@ -24,20 +24,36 @@ function drawGround() {
       <h2>毎フレームくりかえす onFrame</h2>
       <p><code>onFrame(() =&gt; { … });</code> の中に書いたコードは、<strong>1秒に約60回</strong>くりかえし実行されます。</p>
       <p>毎回 <code>background("white")</code> で画面を消してから少しずらしてかくと、動いているように見えます。</p>
+
+      <h3>もし〜なら：if 文</h3>
+      <pre><code>if (条件) {
+  // 条件が true のときだけ、ここが実行される
+}</code></pre>
+      <p>お手本では <code>x &gt; WIDTH</code>（右はしをこえた）ときだけ、<code>x</code> を 0 にもどしています。</p>
+
+      <h3>キーを押しているか調べる</h3>
+      <p><code>keyIsDown("キー")</code> は、そのキーを押している間だけ <code>true</code> になります。if 文の条件に使えます。</p>
+      <p>キーの名前：<code>"ArrowRight"</code>（→） <code>"ArrowLeft"</code>（←） <code>"ArrowUp"</code>（↑） <code>"ArrowDown"</code>（↓） <code>" "</code>（スペース）</p>
+      <p>お手本を実行したら<strong>キャンバスをクリック</strong>して、スペースキーを押してみよう。押している間だけボールが金色になります。</p>
+
       <p>この修行では <code>ground</code>（地面の高さ）と <code>drawGround()</code>（地面をかく）が最初から用意されています。</p>
-      <p>キー入力は <code>keyIsDown("ArrowRight")</code> で調べられます（キャンバスをクリックしてから押そう）。</p>
     `,
     sampleCode: `let x = 0;
 onFrame(() => {
   background("white");
   drawGround();
+  // スペースキーを押している間は金色
+  if (keyIsDown(" ")) {
+    fill("gold");
+  }
   circle(x, ground - 20, 20);
   x = x + 2;
+  // 右はしをこえたら左にもどる
   if (x > WIDTH) {
     x = 0;
   }
 });`,
-    master: ['動きは「消して・ずらして・かく」のくりかえしじゃ。'],
+    master: ['動きは「消して・ずらして・かく」のくりかえしじゃ。', 'if 文を使えば「〜のときだけ」動かせるぞ。'],
   },
 
   task: {
@@ -55,6 +71,9 @@ onFrame(() => {
   }
   circle(x, ground - 20, 20);
 });`,
+    // 自動だと答えの if 行が見えてしまうので、→キーの処理（5〜7行目）だけを隠す。
+    // ほかの行は starterCode と同じなので隠す意味がない
+    hiddenLines: [5, 6, 7],
     starterCode: `let x = 50;
 onFrame(() => {
   background("white");
@@ -64,6 +83,14 @@ onFrame(() => {
   circle(x, ground - 20, 20);
 });`,
     failMessage: '→キーを押したときに x が増えるようになっているかな？',
+    refs: [
+      'keyIsDown',
+      'circle',
+      'background',
+      'onFrame',
+      { sig: 'drawGround()', desc: '地面をかく（この修行で用意）' },
+      { sig: 'ground', desc: '地面の高さ（320）（この修行で用意）' },
+    ],
   },
 
   check(result) {

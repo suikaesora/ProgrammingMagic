@@ -43,7 +43,7 @@ export const tutorialSteps = [
   { scene: 'task', target: 'task-sample', advance: 'event:reveal',
     text: '左下は課題のお手本じゃが、隠されておる。クリックするとはがせるぞ。ためしに1枚はがしてみよ。' },
   { scene: 'task', target: 'lesson-info', advance: 'next',
-    text: 'はがした割合は「解放率」としてここに出る。解放率が低いほど、クリアしたときの宝箱が多いぞ。' },
+    text: 'はがした割合は「解放率」としてここに出る。解放率が低いほど、クリアしたときの宝箱が多いぞ。課題の途中で解説にもどると宝箱が1つ減るから、よく考えるのじゃ。' },
   { scene: 'task', target: 'btn-sample-run', advance: 'next',
     text: '「お手本実行」を押すと、完成したときの動きを一度だけ見られる。' },
   { scene: 'task', target: 'user-code', advance: 'next', block: false,

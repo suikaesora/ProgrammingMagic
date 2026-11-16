@@ -36,6 +36,7 @@ circle(100, 200, size);
 circle(300, 200, size);`,
     // hiddenLines を省略すると自動で約8割の行を隠す
     starterCode: '',
+    refs: ['circle'],
     failMessage: '変数 size の値と、円の位置をたしかめよう。',
   },
 

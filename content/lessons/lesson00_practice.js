@@ -45,6 +45,7 @@ circle(200, 200, 60);`,
 circle(200, 200, 80);`,
     // 行隠しを入れる行（1始まり）。省略すると自動で約8割を隠す
     hiddenLines: [2],
+    refs: ['circle', 'print'],          // 課題画面の「つかう命令」メモ（content/commands.js の名前）
     starterCode: `// ここにコードを書こう\n`,
     master: ['お手本の隠しは、はがすほど宝箱が減るぞ。'],
     failMessage: 'おしい！ 位置と半径をもう一度たしかめよう。',

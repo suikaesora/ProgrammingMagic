@@ -11,7 +11,7 @@ function defaults() {
     avatar: null,           // 選んだ見た目の id
     theme: null,            // 'light' | 'dark' | null(OS に従う)
     progress: {},           // { [lessonId]: { cleared, bestRate, clearedAt } }
-    attempts: {},           // { [lessonId]: { opened: [行番号], sampleRunUsed } } 挑戦中の状態
+    attempts: {},           // { [lessonId]: { opened: [行番号], sampleRunUsed, taskStarted, explainViewed } } 挑戦中の状態
     drafts: {},             // { [lessonId]: 課題で書きかけのコード }
     collection: {},         // { [itemId]: 入手日時 }
     deco: { placed: [] },   // 装飾部の配置 [{ uid, item, x, y, rot, scale, z }]
