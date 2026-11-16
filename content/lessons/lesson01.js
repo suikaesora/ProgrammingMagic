@@ -14,7 +14,7 @@ export default {
       <p><code>let 名前 = 値;</code> と書くと、値を入れておく箱（変数）ができます。</p>
       <pre><code>let x = 100;</code></pre>
       <p>あとから <code>x = x + 120;</code> のように、中身を入れかえることもできます。</p>
-      <p>「1行ずつ実行」を使うと、右下に<strong>変数の中身</strong>が表示されます。x がどう変わるか見てみよう。</p>
+      <p>「🐢 ゆっくり実行」を使うと、右下に<strong>変数の中身</strong>が表示されます。x がどう変わるか見てみよう。</p>
     `,
     sampleCode: `let x = 100;
 let size = 40;

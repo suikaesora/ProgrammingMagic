@@ -6,7 +6,7 @@
 //  advance : 'next' … 吹き出しの「次へ」で進む
 //            'event:<名前>' … その操作をしたら進む
 //              run:start  … 「実行」を押した
-//              step:start … 「1行ずつ」を押した
+//              step:start … 「ゆっくり実行」か「1行すすめる」を押した
 //              nav:task   … 課題パートへ移動した
 //              reveal     … 行隠しをはがした
 //              clear      … 課題をクリアした
@@ -29,11 +29,11 @@ export const tutorialSteps = [
   { scene: 'explain', target: 'stage', advance: 'next',
     text: '結果はこのキャンバスに表示される。print の文字はその下の出力に出るぞ。' },
   { scene: 'explain', target: 'btn-step-auto', advance: 'event:step:start',
-    text: '次は「1行ずつ」じゃ。コードが1行ずつ動くようすを見られる。押してみよ。' },
+    text: '次は「🐢 ゆっくり実行」じゃ。コードが1行ずつ順番に動くようすを見られる。押してみよ。' },
   { scene: 'explain', target: 'side', advance: 'next',
-    text: '1行ずつ実行している間は、ここに変数の中身が出る。実行中の行はお手本コードに色がつくぞ。' },
+    text: 'ゆっくり実行している間は、ここに変数の中身が出る。実行中の行はお手本コードに色がつくぞ。' },
   { scene: 'explain', target: 'controls', advance: 'next',
-    text: '「1歩」で手動で1行ずつ進めたり、一時停止・再開・停止・速さの調整もできる。' },
+    text: '「⏭ 1行すすめる」は押すたびに1行だけ進む。一番上には今の状態が出るぞ。一時停止・止める・速さの調整もここじゃ。' },
   { scene: 'explain', target: 'btn-go-task', advance: 'event:nav:task',
     text: 'わかったら「課題へ」進むのじゃ。' },
 

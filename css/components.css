@@ -167,10 +167,35 @@
 .vp-err-orig { color: var(--c-muted); font-family: var(--font-code); font-size: 12px; }
 
 .vp-controls { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-.vp-btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.vp-btns-sub { justify-content: space-between; }
-.vp-speed { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 700; }
-.vp-speed input { accent-color: var(--c-accent); width: 110px; }
+.vp-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.vp-row-top { flex-wrap: nowrap; }
+.vp-row-top .btn { flex: none; }
+.vp-sep { width: 2px; align-self: stretch; margin: 4px 2px; background: var(--c-surface-2); border-radius: 2px; }
+
+/* 状態表示 */
+.vp-status {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: var(--fs-xs); font-weight: 800;
+  background: var(--c-surface-2); color: var(--c-muted);
+  transition: background .2s, color .2s;
+}
+.vp-status-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vp-status-icon { width: 1.4em; text-align: center; flex: none; }
+.vp-status.is-running { background: var(--c-accent-weak); color: var(--c-text); }
+.vp-status.is-running .vp-status-icon { color: var(--c-accent); animation: status-blink 1s ease-in-out infinite; }
+.vp-status.is-paused { background: var(--c-accent-weak); color: var(--c-text); }
+.vp-status.is-paused .vp-status-icon { color: var(--c-accent); }
+.vp-status.is-done { background: var(--c-success-weak); color: var(--c-text); }
+.vp-status.is-done .vp-status-icon { color: var(--c-success); }
+.vp-status.is-error { background: var(--c-danger-weak); color: var(--c-text); }
+.vp-status.is-error .vp-status-icon { color: var(--c-danger); }
+@keyframes status-blink { 50% { opacity: .35; } }
+
+/* ゆっくり実行の速さ */
+.vp-speed { display: flex; align-items: center; gap: 4px; margin-left: auto; font-size: var(--fs-xs); font-weight: 700; color: var(--c-muted); }
+.vp-speed input { accent-color: var(--c-accent); width: 90px; }
 
 .vp-side { padding: 10px; min-height: 120px; flex: 1; overflow: auto; }
 .vp-vars-head { font-weight: 800; font-size: var(--fs-sm); margin-bottom: 6px; }

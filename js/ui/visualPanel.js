@@ -55,21 +55,25 @@ export function createVisualPanel(host, o) {
       <div class="vp-output" aria-live="polite"><div class="vp-output-empty">print() の出力がここに出ます</div></div>
     </div>
     <div class="vp-controls card" data-tut="controls">
-      <div class="vp-btns">
-        <button type="button" class="btn btn-primary" data-act="run" data-tut="btn-run" title="ふつうに実行">▶ 実行</button>
-        <button type="button" class="btn" data-act="step-auto" data-tut="btn-step-auto" title="1行ずつ自動で実行">1行ずつ</button>
-        <button type="button" class="btn" data-act="step-one" data-tut="btn-step-one" title="手動で1行ずつ進める">1歩</button>
-        <button type="button" class="btn btn-icon" data-act="pause" title="一時停止" aria-label="一時停止">❚❚</button>
-        <button type="button" class="btn btn-icon" data-act="resume" title="再開" aria-label="再開">▶▶</button>
-        <button type="button" class="btn btn-icon" data-act="stop" title="停止" aria-label="停止">■</button>
-      </div>
-      <div class="vp-btns vp-btns-sub">
-        <label class="vp-speed" data-tut="speed" title="1行ずつ実行の速さ">
-          <span>速さ</span>
-          <input type="range" min="0" max="${SPEEDS.length - 1}" step="1">
-        </label>
+      <div class="vp-row vp-row-top">
+        <div class="vp-status is-idle" role="status" aria-live="polite"><span class="vp-status-icon">●</span><span class="vp-status-text">待機中</span></div>
         ${kind === 'task' ? '<button type="button" class="btn btn-sm" data-act="sample-run" data-tut="btn-sample-run" title="完成形を1度だけ見られる">お手本実行</button>' : ''}
-        ${kind === 'explain' ? '<button type="button" class="btn btn-success" data-act="go-task" data-tut="btn-go-task">課題へ →</button>' : ''}
+        ${kind === 'explain' ? '<button type="button" class="btn btn-sm btn-success" data-act="go-task" data-tut="btn-go-task">課題へ →</button>' : ''}
+      </div>
+      <div class="vp-row">
+        <button type="button" class="btn btn-primary" data-act="run" data-tut="btn-run" title="コードを最後まで一気に動かします">▶ 実行</button>
+        <span class="vp-sep" aria-hidden="true"></span>
+        <button type="button" class="btn" data-act="step-auto" data-tut="btn-step-auto" title="1行ずつ自動で進みます（変数の中身も見られます）">🐢 ゆっくり実行</button>
+        <button type="button" class="btn" data-act="step-one" data-tut="btn-step-one" title="押すたびに1行だけ進みます">⏭ 1行すすめる</button>
+      </div>
+      <div class="vp-row">
+        <button type="button" class="btn btn-sm" data-act="toggle-pause" title="一時停止／つづける">❚❚ 一時停止</button>
+        <button type="button" class="btn btn-sm" data-act="stop" title="実行を止めます">■ 止める</button>
+        <label class="vp-speed" data-tut="speed" title="ゆっくり実行の速さ">
+          <span class="vp-speed-end">おそい</span>
+          <input type="range" min="0" max="${SPEEDS.length - 1}" step="1" aria-label="ゆっくり実行の速さ">
+          <span class="vp-speed-end">はやい</span>
+        </label>
       </div>
     </div>
     <div class="vp-side card" data-tut="side">
@@ -100,6 +104,10 @@ export function createVisualPanel(host, o) {
   let isSample = false;
   let prevVars = {};
   let sampleUsed = !!o.sampleRunUsed;
+  let currentLine = null;
+  const statusEl = host.querySelector('.vp-status');
+  const statusIcon = host.querySelector('.vp-status-icon');
+  const statusText = host.querySelector('.vp-status-text');
 
   // ---- 出力 ----
   function clearOutput() { output.innerHTML = ''; }
@@ -150,6 +158,8 @@ export function createVisualPanel(host, o) {
     canvas,
     onPrint: (s) => appendLog(s),
     onLine: (line) => {
+      currentLine = line || null;
+      updateStatus();
       if (!currentEditor) return;
       currentEditor.markLine(line, 'exec');
       varsLine.textContent = line ? `（${line}行目の前）` : '';
@@ -200,12 +210,45 @@ export function createVisualPanel(host, o) {
   function updateButtons() {
     const s = runner.state;
     const step = runner.mode === 'step';
-    btn('pause').disabled = s !== 'running';
-    btn('resume').disabled = s !== 'paused';
-    btn('stop').disabled = s === 'idle';
-    btn('step-one').classList.toggle('btn-primary', step && s === 'paused');
+    const tp = btn('toggle-pause');
+    tp.disabled = s !== 'running' && s !== 'paused';
+    tp.textContent = s === 'paused' ? '▶ つづける' : '❚❚ 一時停止';
+    btn('stop').disabled = s !== 'running' && s !== 'paused';
+    btn('step-one').classList.toggle('btn-primary', step && s === 'paused' && !isSample);
     const sr = btn('sample-run');
     if (sr) sr.disabled = sampleUsed;
+    updateStatus();
+  }
+
+  // ---- 状態表示 ----
+  function updateStatus() {
+    const s = runner.state;
+    const step = runner.mode === 'step';
+    const at = step && currentLine ? `（${currentLine}行目）` : '';
+    let icon = '●';
+    let text = '待機中';
+    let cls = 'is-idle';
+    if (s === 'running') {
+      icon = step ? '🐢' : '▶';
+      text = step ? `ゆっくり実行中${at}` : '実行中';
+      cls = 'is-running';
+    } else if (s === 'paused') {
+      icon = '❚❚';
+      text = `一時停止中${at}`; // 次に押すボタン（1行すすめる）はボタン側の強調で示す
+      cls = 'is-paused';
+    } else if (s === 'done') {
+      icon = '✓';
+      text = '実行おわり';
+      cls = 'is-done';
+    } else if (s === 'error') {
+      icon = '✕';
+      text = 'エラーで止まりました';
+      cls = 'is-error';
+    }
+    if (isSample && s !== 'idle') text = `お手本：${text}`;
+    statusEl.className = `vp-status ${cls}`;
+    statusIcon.textContent = icon;
+    statusText.textContent = text;
   }
 
   host.querySelector('.vp-controls').addEventListener('click', (e) => {
@@ -218,8 +261,10 @@ export function createVisualPanel(host, o) {
         if (runner.mode === 'step' && runner.state === 'paused' && !isSample) runner.stepOnce();
         else start('step-one');
         break;
-      case 'pause': runner.pause(); break;
-      case 'resume': runner.resume(); break;
+      case 'toggle-pause':
+        if (runner.state === 'running') runner.pause();
+        else if (runner.state === 'paused') runner.resume();
+        break;
       case 'stop': runner.stop(); break;
       case 'go-task': o.onGoTask?.(); break;
       case 'sample-run': {
