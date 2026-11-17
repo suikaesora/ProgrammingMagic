@@ -71,9 +71,14 @@ export function getAttempt(id) {
   };
 }
 
+/** 宝箱の数が決まっている修行か（items が1つだけなら、解放率や解説に関係なく宝箱は1つ） */
+export function hasFixedChest(id) {
+  return (getLesson(id)?.items || []).length <= 1;
+}
+
 /** 解説を開くと宝箱が減る状態か（未クリアで、課題を始めていて、まだ解説を見ていない） */
 export function explainWouldPenalize(id) {
-  if (isCleared(id)) return false;
+  if (isCleared(id) || hasFixedChest(id)) return false;
   const a = getAttempt(id);
   return a.taskStarted && !a.explainViewed;
 }
@@ -92,7 +97,7 @@ export function recordClear(id, rate) {
   const lesson = getLesson(id);
   const first = !isCleared(id);
   const wasAll = allCleared();
-  const explainViewed = first && getAttempt(id).explainViewed;
+  const explainViewed = first && !hasFixedChest(id) && getAttempt(id).explainViewed;
   const count = Math.max(1, chestCount(rate) - (explainViewed ? (config.explainPenalty ?? 1) : 0));
   const chestItems = (lesson.items || []).slice(0, count);
 

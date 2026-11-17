@@ -6,7 +6,7 @@ import { createVisualPanel } from '../ui/visualPanel.js';
 import { mountTutorial } from '../ui/tutorial.js';
 import { buildProgram } from '../runner/template.js';
 import { store } from '../core/storage.js';
-import { getAttempt, saveAttempt, recordClear, isCleared } from '../core/progress.js';
+import { getAttempt, saveAttempt, recordClear, isCleared, hasFixedChest } from '../core/progress.js';
 import { config } from '../../content/config.js';
 import { commands } from '../../content/commands.js';
 import { sprites } from '../../content/sprites.js';
@@ -47,7 +47,8 @@ export function mount(root, { lesson }) {
   const firstTry = !isCleared(lesson.id);
   // 課題を始めた印（これ以降に解説を見ると宝箱が減る）
   if (firstTry && !attempt.taskStarted) saveAttempt(lesson.id, { taskStarted: true });
-  const explainPenalty = (config.explainPenalty ?? 1) > 0;
+  // 宝箱の数が決まっている修行（修行の掟など）では、解説を見ても宝箱は減らない
+  const explainPenalty = (config.explainPenalty ?? 1) > 0 && !hasFixedChest(lesson.id);
   root.appendChild(lessonHeader(lesson, 'task', { explainWarn: firstTry && explainPenalty && !attempt.explainViewed }));
   const main = document.createElement('main');
   main.className = 'layout-task';

@@ -8,8 +8,6 @@
 export const items = [
   // 修行0：修行の掟
   { id: 'star', name: 'きらきら星', image: 'assets/items/l00-1.png', description: 'はじめの一歩のあかし。' },
-  { id: 'heart', name: 'ハート', image: 'assets/items/l00-2.png', description: 'コードへの愛。' },
-  { id: 'flower', name: 'お花', image: 'assets/items/l00-3.png', description: '道場の庭に咲いていた。' },
 
   // 修行1：命令魔法
   { id: 'hat', name: 'ぼうし', image: 'assets/items/l01-1.png', description: '変数のように中身を入れかえられる…？' },
