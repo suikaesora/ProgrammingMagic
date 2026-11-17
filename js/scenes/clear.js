@@ -24,8 +24,9 @@ export function mount(root, { lesson }) {
     go('#/home');
     return;
   }
-  const next = nextLesson(lesson.id);
-  const goCert = allCleared() && (info.justCompletedAll || !store.get().certSeen);
+  // 確認用（__app.open）のクリアは記録していないので、次の修行・物語のつづきへは進ませない
+  const next = info.preview ? null : nextLesson(lesson.id);
+  const goCert = !info.preview && allCleared() && (info.justCompletedAll || !store.get().certSeen);
   const pct = Math.round(info.rate * 100);
 
   root.innerHTML = `
@@ -42,6 +43,7 @@ export function mount(root, { lesson }) {
         <p class="clear-chest-note">${info.firstClear
           ? `宝箱が <strong>${info.chestItems.length}個</strong> 出てきた！ クリックして開けよう。${info.explainViewed ? '<br><span class="clear-penalty">（課題の途中で解説を見たので、宝箱が1つ減りました）</span>' : ''}`
           : '宝箱の中身は、はじめてクリアしたときに受け取りずみです。'}</p>
+        ${info.preview ? '<p class="clear-penalty">確認用に開いた修行なので、クリアとアイテムは記録していません。</p>' : ''}
         <div class="chests">
           ${info.chestItems.map((id, i) => `
             <button type="button" class="chest" data-item="${id}" style="animation-delay:${0.2 + i * 0.15}s" aria-label="宝箱${i + 1}を開ける">
@@ -68,7 +70,7 @@ export function mount(root, { lesson }) {
       const box = c.querySelector('.chest-item');
       box.innerHTML = item
         ? `<img src="${item.image}" alt=""><span class="chest-item-name">${escapeHtml(item.name)}</span>
-           <span class="chest-item-note">${info.firstClear ? 'コレクションに追加！' : '入手ずみ'}</span>`
+           <span class="chest-item-note">${info.preview ? '確認用（記録しない）' : info.firstClear ? 'コレクションに追加！' : '入手ずみ'}</span>`
         : '<span class="chest-item-name">？</span>';
       const r = c.getBoundingClientRect();
       confetti({ count: 40, duration: 1800, origin: { x: r.left + r.width / 2, y: r.top + r.height / 3 } });

@@ -35,9 +35,17 @@ export function allowPreview(id) {
   try { sessionStorage.setItem(PREVIEW_KEY, JSON.stringify([...ids, id])); } catch (e) { /* 保存できなくても続ける */ }
 }
 
+/** 確認用に開いた修行か（クリアしても進捗・アイテムに記録しない） */
+export function isPreview(id) { return previewIds().includes(id); }
+
+/** 確認用に開いた修行をすべて元にもどす */
+export function clearPreview() {
+  try { sessionStorage.removeItem(PREVIEW_KEY); } catch (e) { /* 何もしない */ }
+}
+
 /** クリア済みの修行と、その1つ次の修行まで挑戦できる（確認用に開いた修行も） */
 export function isUnlocked(id) {
-  if (previewIds().includes(id)) return true;
+  if (isPreview(id)) return true;
   const i = lessonIndex(id);
   if (i <= 0) return i === 0;
   return isCleared(lessons[i - 1].id);
@@ -87,6 +95,13 @@ export function recordClear(id, rate) {
   const explainViewed = first && getAttempt(id).explainViewed;
   const count = Math.max(1, chestCount(rate) - (explainViewed ? (config.explainPenalty ?? 1) : 0));
   const chestItems = (lesson.items || []).slice(0, count);
+
+  // 確認用に開いた修行は、クリア画面を見せるだけで、進捗・アイテムには記録しない
+  if (isPreview(id)) {
+    store.update((s) => { delete s.attempts[id]; });
+    return { lessonId: id, rate, firstClear: first, chestItems, explainViewed, justCompletedAll: false, preview: true };
+  }
+
   store.update((s) => {
     const prev = s.progress[id];
     s.progress[id] = {

@@ -2,7 +2,7 @@
 import { startRouter, go } from './router.js';
 import { applyTheme } from './core/theme.js';
 import { store } from './core/storage.js';
-import { getLessons, getLesson, allowPreview } from './core/progress.js';
+import { getLessons, getLesson, allowPreview, clearPreview } from './core/progress.js';
 import { config } from '../content/config.js';
 import { loadSprites } from './runner/sprites.js';
 
@@ -15,7 +15,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyThe
 //   __app.unlockAll()  すべての修行をクリア済みにする
 //   __app.reset()      進捗をすべて消す
 //   __app.state()      保存内容を見る
-//   __app.open(10, 'task')  指定の修行だけを開く（番号か ID。'explain' か 'task'。進捗は変えない）
+//   __app.open(10, 'task')  指定の修行だけを開く（番号か ID。'explain' か 'task'。クリアしても進捗に記録しない）
+//   __app.closePreview()    __app.open で開いた修行を、ふつうの状態にもどす
 //   __app.lessons()    修行の番号と ID の一覧
 window.__app = {
   state: () => JSON.parse(JSON.stringify(store.get())),
@@ -39,6 +40,11 @@ window.__app = {
       delete s.attempts[lesson.id]; // 行隠し・お手本実行などを最初の状態にもどす
     });
     go(`#/lesson/${lesson.id}/${part}`);
+  },
+  closePreview() {
+    clearPreview();
+    location.hash = '#/home';
+    location.reload();
   },
   reset() { store.reset(); location.hash = '#/intro'; location.reload(); },
   unlockAll() {
