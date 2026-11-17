@@ -66,7 +66,7 @@ function double(n) {
   return n * 2;
 }
 print(double(21));`,
-    master: ['よく使う魔法は、命令にしてしまうのだわ。', 'return は、答えを呼んだ場所へ返すのだぞよ。'],
+    master: ['よく使う魔法は、命令にしてしまうのだぞよ。', 'return は、答えを呼んだ場所へ返すのだぞよ。'],
   },
 
   task: {

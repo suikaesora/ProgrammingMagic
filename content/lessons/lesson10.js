@@ -59,13 +59,23 @@ function randomHand() {
       <h3>勝ち負けの決め方</h3>
       <ul>
         <li>2人の手が同じ → あいこ</li>
-        <li>（自分がグー <strong>かつ</strong> 相手がチョキ）<strong>または</strong>（自分がチョキ かつ 相手がパー）<strong>または</strong>（自分がパー かつ 相手がグー） → 勝ち</li>
+        <li>自分がグー <strong>かつ</strong> 相手がチョキ、自分がチョキ かつ 相手がパー、自分がパー かつ 相手がグー → 勝ち</li>
         <li>それ以外 → 負け</li>
       </ul>
-      <p>「かつ」は <code>&amp;&amp;</code>、「または」は <code>||</code> だったな。長い条件は <code>( )</code> でくぎると読みやすい。</p>
+
+      <h3>長い条件は、関数にして名前をつける</h3>
+      <p>「勝ち」の条件を1つの if に全部書くと、<code>||</code> と <code>&amp;&amp;</code> がつながった、とても長い式になってしまう。そこで<strong>命令生み出し魔法</strong>の出番だ。「勝っているか」を調べる関数を作り、<strong>true か false を return</strong> させる。</p>
+      <pre><code>function isWin(me, cpu) {
+  if (me === "gu" &amp;&amp; cpu === "choki") { return true; }
+  …（ほかの勝ちの組み合わせ）…
+  return false;
+}</code></pre>
+      <p>勝ちの組み合わせに当てはまれば、その場で <code>return true;</code> して関数は終わる。どれにも当てはまらなければ、最後の <code>return false;</code> まで進む。</p>
+      <p>使うほうは <code>if (isWin(me, cpu)) { … }</code> と書くだけでよい。<strong>名前を見るだけで「勝っていたら」と読める</strong>のが、関数にする良さだ。</p>
+      <p class="note"><code>{ return true; }</code> のように、中身が短いときは <code>{ }</code> を1行に書いてもよい。</p>
 
       <h3>お手本：コイントス3回勝負</h3>
-      <p>お手本コードは、じゃんけんではなく「コインの表か裏かを当てる」ゲームだ。流れはじゃんけんとそっくりなので、よく読んでから課題に進むとよい。</p>
+      <p>お手本コードは、じゃんけんではなく「コインの表か裏かを当てる」ゲームだ。当たったかどうかを <code>isHit</code> という関数で調べている。流れはじゃんけんとそっくりなので、よく読んでから課題に進むとよい。</p>
 
       <details class="tips">
         <summary>💡 もっと知りたい人へ（TIPS）</summary>
@@ -74,7 +84,13 @@ function randomHand() {
         <p>「先に2勝したほうの勝ち」にしたいなら、for のかわりに <code>while (win &lt; 2 &amp;&amp; lose &lt; 2)</code> を使う手もある。</p>
       </details>
     `,
-    sampleCode: `let hit = 0;
+    sampleCode: `// 当たりなら true を返す関数
+function isHit(key, coin) {
+  if (key === "1" && coin === 1) { return true; }
+  if (key === "2" && coin === 2) { return true; }
+  return false;
+}
+let hit = 0;
 for (let round = 1; round <= 3; round++) {
   print(round + "回目：1 なら おもて、2 なら うら");
   let key = waitKey();
@@ -87,7 +103,7 @@ for (let round = 1; round <= 3; round++) {
     render(200, 150, "star");
     print("うら！");
   }
-  if ((key === "1" && coin === 1) || (key === "2" && coin === 2)) {
+  if (isHit(key, coin)) {
     hit = hit + 1;
     print("あたり！");
   } else {
@@ -95,31 +111,45 @@ for (let round = 1; round <= 3; round++) {
   }
 }
 print("あたりは " + hit + " 回");`,
-    master: ['まずはゲームの流れを、言葉で考えるのだわ。', 'お手本は、じゃんけんとよく似た流れだぞよ。'],
+    master: ['まずはゲームの流れを、言葉で考えるのだぞよ。', '長い条件は、関数にして名前をつけると読みやすくなるぞよ。'],
   },
 
   task: {
     problemHtml: `
       <h3>課題：じゃんけん3回勝負</h3>
-      <p>くりかえし・手を選ぶ・画像を出すところまでは、最初から書いてある。足りないところを書こう。</p>
+      <p>コメントの場所に、足りないところを書こう。</p>
       <ol>
-        <li><strong>勝ち負けの判定</strong>：あいこなら <strong>あいこ</strong>、勝ったら <code>win</code> を1増やして <strong>かち！</strong>、負けたら <code>lose</code> を1増やして <strong>まけ…</strong> と print</li>
-        <li><strong>結果</strong>：3回終わったら <code>print("けっか：" + win + "勝 " + lose + "敗");</code> と出そう</li>
+        <li><strong>勝ちを調べる関数</strong>：関数 <code>isWin(me, cpu)</code> を作ろう。自分の手 <code>me</code> が相手の手 <code>cpu</code> に勝っていれば <code>true</code>、そうでなければ <code>false</code> を return する</li>
+        <li><strong>数える箱</strong>：勝った数 <code>win</code> と負けた数 <code>lose</code> を、どちらも <code>0</code> で用意する</li>
+        <li><strong>手を決める</strong>：くりかえしの中で、自分の手 <code>me</code> を <code>waitHand()</code> で、相手の手 <code>cpu</code> を <code>randomHand()</code> で決める</li>
+        <li><strong>勝ち負けの判定</strong>：あいこなら <strong>あいこ</strong>、<code>isWin</code> で勝っていたら <code>win</code> を1増やして <strong>かち！</strong>、負けたら <code>lose</code> を1増やして <strong>まけ…</strong> と print</li>
       </ol>
       <p>実行したらキャンバスをクリックして、<strong>1</strong>（グー）・<strong>2</strong>（チョキ）・<strong>3</strong>（パー）で手を出そう。</p>
     `,
-    answerCode: `let win = 0;
+    answerCode: `// 勝ちなら true を返す関数
+function isWin(me, cpu) {
+  if (me === "gu" && cpu === "choki") { return true; }
+  if (me === "choki" && cpu === "pa") { return true; }
+  if (me === "pa" && cpu === "gu") { return true; }
+  return false;
+}
+// 勝った数・負けた数
+let win = 0;
 let lose = 0;
+// 3回勝負
 for (let round = 1; round <= 3; round++) {
   print(round + "回戦！ 1:グー 2:チョキ 3:パー");
+  // 自分の手と相手の手
   let me = waitHand();
   let cpu = randomHand();
+  // 2人の手を出す
   background("white");
   render(100, 200, me);
   render(300, 200, cpu);
+  // 勝ち負けの判定
   if (me === cpu) {
     print("あいこ");
-  } else if ((me === "gu" && cpu === "choki") || (me === "choki" && cpu === "pa") || (me === "pa" && cpu === "gu")) {
+  } else if (isWin(me, cpu)) {
     win = win + 1;
     print("かち！");
   } else {
@@ -127,21 +157,27 @@ for (let round = 1; round <= 3; round++) {
     print("まけ…");
   }
 }
+// 結果
 print("けっか：" + win + "勝 " + lose + "敗");`,
-    hiddenLines: [10, 11, 12, 13, 14, 15, 16, 17, 18, 20],
-    starterCode: `let win = 0;
-let lose = 0;
+    hiddenLines: [2, 3, 4, 5, 6, 7, 9, 10, 15, 16, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    starterCode: `// 勝ちなら true を返す関数
+
+// 勝った数・負けた数
+
+// 3回勝負
 for (let round = 1; round <= 3; round++) {
   print(round + "回戦！ 1:グー 2:チョキ 3:パー");
-  let me = waitHand();
-  let cpu = randomHand();
+  // 自分の手と相手の手
+
+  // 2人の手を出す
   background("white");
   render(100, 200, me);
   render(300, 200, cpu);
-  // ここに勝ち負けの判定を書こう
+  // 勝ち負けの判定
 
 }
-// ここに結果を出そう
+// 結果
+print("けっか：" + win + "勝 " + lose + "敗");
 `,
     refs: [
       { sig: 'waitHand()', desc: '1・2・3 のキーが押されるまで待ち、<code>"gu"</code> <code>"choki"</code> <code>"pa"</code> のどれかを返す（この修行で用意）' },
@@ -150,8 +186,8 @@ for (let round = 1; round <= 3; round++) {
       'print',
     ],
     sprites: ['gu', 'choki', 'pa'],
-    master: ['勝ちの条件は、&& と || を組み合わせるのだぞよ。'],
-    failMessage: '3回勝負が終わったときの win と lose の数、「けっか」の表示をたしかめるのだぞよ。',
+    master: ['勝ちの組み合わせを1つずつ調べて、当てはまったら return true; だぞよ。'],
+    failMessage: '関数 isWin と、3回勝負が終わったときの win と lose の数をたしかめるのだぞよ。',
   },
 
   check(result) {
@@ -169,7 +205,9 @@ for (let round = 1; round <= 3; round++) {
       if (beats[me[i]] === cpu[i]) win++;
       else lose++;
     }
-    return result.vars.win === win && result.vars.lose === lose
+    // isWin はキー待ちのあるコードではジェネレータに変換されることがあるので、あるかどうかだけを見る
+    return typeof result.vars.isWin === 'function'
+      && result.vars.win === win && result.vars.lose === lose
       && result.logs.some((l) => l.includes('けっか') && l.includes(`${win}勝`) && l.includes(`${lose}敗`));
   },
 };

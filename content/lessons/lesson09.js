@@ -62,7 +62,7 @@ print(slime.name + " HP:" + slime.hp);
 slime.hp = slime.hp - 5;
 print(slime.name + " HP:" + slime.hp);
 slime.cry();`,
-    master: ['関係のある値は、まとめてしまうのだわ。', 'オブジェクト.名前 で取り出せるぞよ。'],
+    master: ['関係のある値は、まとめてしまうのだぞよ。', 'オブジェクト.名前 で取り出せるぞよ。'],
   },
 
   task: {
@@ -73,7 +73,6 @@ slime.cry();`,
         <li>オブジェクト <code>enemy</code> を作ろう：<code>name</code> は <code>"ドラゴン"</code>、<code>hp</code> は <code>30</code>、<code>atk</code> は <code>6</code>、<code>x</code> は <code>280</code>、<code>y</code> は <code>200</code></li>
         <li>それぞれの <code>x</code>・<code>y</code> を使って、レン（<code>"ren"</code>）とドラゴン（<code>"dragon"</code>）を出そう</li>
         <li><code>hero.shout();</code> を呼び出そう</li>
-        <li>ドラゴンの <code>hp</code> を <strong>8</strong> へらして、<code>print(enemy.name + "のHP: " + enemy.hp);</code> と出そう</li>
       </ol>
     `,
     answerCode: `const hero = {
@@ -94,25 +93,22 @@ const enemy = {
 };
 render(hero.x, hero.y, "ren");
 render(enemy.x, enemy.y, "dragon");
-hero.shout();
-enemy.hp = enemy.hp - 8;
-print(enemy.name + "のHP: " + enemy.hp);`,
-    hiddenLines: [2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21],
+hero.shout();`,
+    hiddenLines: [2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 17, 18, 19],
     starterCode: '',
     refs: ['render', 'print'],
     sprites: ['ren', 'dragon'],
     master: ['名前: 値 を , で区切るのを忘れるでないぞよ。'],
-    failMessage: 'hero と enemy の中身の名前と値、ドラゴンの HP が 22 になっているかをたしかめるのだぞよ。',
+    failMessage: 'hero と enemy の中身の名前と値、画像の位置、「いくぞ！」の表示をたしかめるのだぞよ。',
   },
 
   check(result) {
     const { hero, enemy } = result.vars;
     if (!hero || !enemy || typeof hero !== 'object' || typeof enemy !== 'object') return false;
     const heroOk = hero.name === 'レン' && hero.hp === 40 && hero.x === 100 && hero.y === 250 && typeof hero.shout === 'function';
-    const enemyOk = enemy.name === 'ドラゴン' && enemy.hp === 22 && enemy.atk === 6 && enemy.x === 280 && enemy.y === 200;
+    const enemyOk = enemy.name === 'ドラゴン' && enemy.hp === 30 && enemy.atk === 6 && enemy.x === 280 && enemy.y === 200;
     const at = (name, x, y) => result.find('render', (c) => c.args[2] === name && c.args[0] === x && c.args[1] === y).length > 0;
     return heroOk && enemyOk && at('ren', 100, 250) && at('dragon', 280, 200)
-      && result.logs.some((l) => l.includes('いくぞ'))
-      && result.logs.some((l) => l.includes('ドラゴン') && l.includes('22'));
+      && result.logs.some((l) => l.includes('いくぞ'));
   },
 };

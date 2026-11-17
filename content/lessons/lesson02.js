@@ -11,7 +11,7 @@ export default {
   explain: {
     html: `
       <h2>計算魔法：コードに計算させる</h2>
-      <p>コードは計算が得意だ。<code>print</code> の材料に計算を書くと、<strong>答え</strong>が出てくる。</p>
+      <p>コードは計算が得意だ。<code>print</code> の引数に計算を書くと、<strong>答え</strong>が出てくる。</p>
       <pre><code>print(12 + 30);   // 42 と出る
 print("12 + 30"); // " で囲むと、ただの文字としてそのまま出る</code></pre>
 
@@ -46,7 +46,7 @@ print("12 + 30"); // " で囲むと、ただの文字としてそのまま出る
       </table>
       <p><code>|</code> は、Shift キーを押しながら <code>¥</code> キーで打てる。</p>
 
-      <h3>命令の材料にも計算が書ける</h3>
+      <h3>命令の引数にも計算が書ける</h3>
       <pre><code>render(100 + 100, 150 * 2, "slime"); // (200, 300) に出る</code></pre>
 
       <details class="tips">
@@ -66,7 +66,7 @@ print(5 === 3);
 print(true && false);
 print(true || false);
 render(100 + 100, 150 * 2, "slime");`,
-    master: ['計算はコードにまかせればよいわ。', '比べた結果は true か false になるのだぞよ。'],
+    master: ['計算はコードにまかせればよいぞよ。', '比べた結果は true か false になるのだぞよ。'],
   },
 
   task: {
@@ -77,7 +77,7 @@ render(100 + 100, 150 * 2, "slime");`,
         <li>スライムを <strong>4</strong> ひきたおした。1ぴき <strong>15</strong> ゴールドなら、ぜんぶでいくら？ <code>print</code> で出そう</li>
         <li>HP <strong>80</strong> のレンが <strong>23</strong> のダメージを受けた。のこりの HP を出そう</li>
         <li>レベル <strong>12</strong> は <strong>10 以上</strong>か？ 比べた結果（true / false）を出そう</li>
-        <li>鍵を持っている（<code>true</code>）<strong>かつ</strong> 扉があいている（<code>false</code>）か？ 結果を出そう</li>
+        <li>扉を通るには「鍵を持っている」<strong>かつ</strong>「扉があいている」の両方が必要だ。いま、鍵は持っている（<code>true</code>）が、扉はあいていない（<code>false</code>）。扉を通れるか（true / false）を、<code>&amp;&amp;</code> を使った式で出そう</li>
         <li>コイン（<code>"coin"</code>）を、x が <code>50 * 4</code>、y が <code>300</code> の位置に出そう</li>
       </ol>
     `,
@@ -87,7 +87,7 @@ print(4 * 15);
 print(80 - 23);
 // 3. レベル 12 は 10 以上？
 print(12 >= 10);
-// 4. 鍵を持っている かつ 扉があいている？
+// 4. 鍵を持っている(true) かつ 扉があいている(false)。扉を通れる？
 print(true && false);
 // 5. コインを出す
 render(50 * 4, 300, "coin");`,
@@ -98,7 +98,7 @@ render(50 * 4, 300, "coin");`,
 
 // 3. レベル 12 は 10 以上？
 
-// 4. 鍵を持っている かつ 扉があいている？
+// 4. 鍵を持っている(true) かつ 扉があいている(false)。扉を通れる？
 
 // 5. コインを出す
 `,

@@ -21,8 +21,23 @@ export function nextLesson(id) {
 
 export function isCleared(id) { return !!store.get().progress[id]?.cleared; }
 
-/** クリア済みの修行と、その1つ次の修行まで挑戦できる */
+// ---- 制作・確認用：__app.open() で開いた修行は、解放前でも開ける ----
+// 進捗には保存せず sessionStorage に置くので、タブを閉じれば元にもどる（再読み込みでは消えない）
+const PREVIEW_KEY = 'programming-magic-preview';
+
+function previewIds() {
+  try { return JSON.parse(sessionStorage.getItem(PREVIEW_KEY)) || []; } catch (e) { return []; }
+}
+
+export function allowPreview(id) {
+  const ids = previewIds();
+  if (ids.includes(id)) return;
+  try { sessionStorage.setItem(PREVIEW_KEY, JSON.stringify([...ids, id])); } catch (e) { /* 保存できなくても続ける */ }
+}
+
+/** クリア済みの修行と、その1つ次の修行まで挑戦できる（確認用に開いた修行も） */
 export function isUnlocked(id) {
+  if (previewIds().includes(id)) return true;
   const i = lessonIndex(id);
   if (i <= 0) return i === 0;
   return isCleared(lessons[i - 1].id);

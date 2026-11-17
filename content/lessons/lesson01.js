@@ -49,7 +49,7 @@ export default {
 render(200, 120, "zork");
 render(100, 280, "slime");
 render(300, 280, "slime", 120);`,
-    master: ['命令魔法は、すべての魔法の基本だわ。', '" は Shift を押しながら 2 で打つのだぞよ。'],
+    master: ['命令魔法は、すべての魔法の基本だぞよ。', '" は Shift を押しながら 2 で打つのだぞよ。'],
   },
 
   task: {
